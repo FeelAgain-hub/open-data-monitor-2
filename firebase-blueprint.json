@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "EsozDeclaration": {
+      "title": "EsozDeclaration",
+      "description": "ESOZ declarations data",
+      "type": "object",
+      "properties": {
+        "sessions": { "type": "number" },
+        "paid": { "type": "number" },
+        "ts": { "type": "string" }
+      },
+      "required": ["sessions", "paid", "ts"]
+    },
+    "NszuContract": {
+      "title": "NszuContract",
+      "description": "NSZU contracts data",
+      "type": "object",
+      "properties": {
+        "kode": { "type": "string" },
+        "pkg": { "type": "string" },
+        "sessions": { "type": "number" },
+        "ts": { "type": "string" }
+      },
+      "required": ["kode", "sessions", "ts"]
+    },
+    "MinSocVpo": {
+      "title": "MinSocVpo",
+      "description": "MinSoc VPO data",
+      "type": "object",
+      "properties": {
+        "city_pop": { "type": "string" },
+        "ptsd": { "type": "boolean" }
+      },
+      "required": ["city_pop", "ptsd"]
+    },
+    "AcapsUkraine": {
+      "title": "AcapsUkraine",
+      "description": "ACAPS severity data",
+      "type": "object",
+      "properties": {
+        "severity": { "type": "number" },
+        "updated": { "type": "string" }
+      },
+      "required": ["severity", "updated"]
+    },
+    "ReachMsna": {
+      "title": "ReachMsna",
+      "description": "REACH MSNA data",
+      "type": "object",
+      "properties": {
+        "ptsd_prevalence": { "type": "number" },
+        "sample": { "type": "number" }
+      },
+      "required": ["ptsd_prevalence"]
+    },
+    "WhoSurvey": {
+      "title": "WhoSurvey",
+      "description": "WHO survey data",
+      "type": "object",
+      "properties": {
+        "stress_rate": { "type": "number" },
+        "region": { "type": "string" }
+      },
+      "required": ["stress_rate", "region"]
+    },
+    "Mhpi": {
+      "title": "Mhpi",
+      "description": "Aggregated MHPI index",
+      "type": "object",
+      "properties": {
+        "index": { "type": "number" },
+        "components": { "type": "object" },
+        "ts": { "type": "string" }
+      },
+      "required": ["index", "ts"]
+    }
+  },
+  "firestore": {
+    "/esoz_declarations/{id}": {
+      "schema": "EsozDeclaration",
+      "description": "ESOZ declarations"
+    },
+    "/nszu_contracts/{id}": {
+      "schema": "NszuContract",
+      "description": "NSZU contracts"
+    },
+    "/min_soc_vpo/{id}": {
+      "schema": "MinSocVpo",
+      "description": "MinSoc VPO"
+    },
+    "/acaps_ukraine/{id}": {
+      "schema": "AcapsUkraine",
+      "description": "ACAPS severity"
+    },
+    "/reach_msna/{id}": {
+      "schema": "ReachMsna",
+      "description": "REACH MSNA"
+    },
+    "/who_survey/{id}": {
+      "schema": "WhoSurvey",
+      "description": "WHO survey"
+    },
+    "/aggregated_metrics/{id}": {
+      "schema": "Mhpi",
+      "description": "Aggregated MHPI index"
+    }
+  }
+}

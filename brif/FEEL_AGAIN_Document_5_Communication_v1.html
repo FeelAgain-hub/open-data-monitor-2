@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEEL Again — Документ 5: Комунікаційна стратегія / Communication Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root { --navy: #0F2B46; --navy2: #0D1F33; --navy3: #1A3A5C; --gold: #B8860B; --gold2: #D4A017; --gold3: #F0C040; --teal: #2A9D8F; --blue: #2563EB; --red: #C0392B; --amber: #D97706; --green: #16A34A; --white: #FFFFFF; --light: #F0F4F8; --light2: #E8EEF5; --text: #1A1A2E; --dim: #5A6478; --border: #D1D9E6; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Source Sans 3', sans-serif; background: var(--light); color: var(--text); line-height: 1.7; font-size: 11pt; }
+.lang-bar { position: fixed; top: 16px; right: 20px; z-index: 1000; display: flex; gap: 6px; background: rgba(15,43,70,0.95); border: 1px solid var(--gold); border-radius: 6px; padding: 4px 8px; }
+.lang-btn { background: none; border: none; color: var(--gold2); font-size: 12px; font-weight: 700; cursor: pointer; padding: 3px 8px; border-radius: 4px; font-family: 'Source Sans 3', sans-serif; transition: all 0.2s; }
+.lang-btn.active { background: var(--gold); color: var(--navy2); }
+.lang-btn:not(.active):hover { color: var(--white); }
+.page { max-width: 210mm; margin: 0 auto; background: var(--white); box-shadow: 0 4px 30px rgba(0,0,0,0.12); padding: 40px 48px; }
+.cover { background: linear-gradient(135deg, var(--navy3) 0%, var(--navy) 50%, #0a1628 100%); color: var(--white); padding: 80px 48px 60px; text-align: center; margin: -40px -48px 40px; border-bottom: 4px solid var(--amber); }
+.cover h1 { font-size: 36pt; font-weight: 300; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px; }
+.cover .subtitle { font-size: 14pt; font-weight: 300; color: var(--gold2); margin-bottom: 8px; }
+.cover .meta { font-size: 9pt; color: rgba(255,255,255,0.5); margin-top: 30px; }
+h2 { font-size: 18pt; color: var(--navy); border-bottom: 2px solid var(--gold); padding-bottom: 8px; margin: 50px 0 20px; }
+h3 { font-size: 13pt; font-weight: 700; color: var(--navy3); margin: 30px 0 12px; }
+h4 { font-size: 11pt; font-weight: 700; color: var(--gold); margin: 20px 0 8px; }
+p { margin-bottom: 14px; text-align: justify; }
+.ref { font-family: 'JetBrains Mono', monospace; font-size: 8pt; color: var(--dim); }
+.key-box { background: var(--light); border-left: 4px solid var(--gold); padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.crisis-box { background: var(--navy); color: var(--white); padding: 20px 24px; border-radius: 8px; margin: 20px 0; }
+.crisis-box strong { color: var(--gold2); }
+.warning-box { background: #FFF8E1; border-left: 4px solid var(--amber); padding: 14px 18px; margin: 16px 0; border-radius: 0 6px 6px 0; font-size: 10pt; }
+.formula-box { background: #1a1a2e; color: #e0e0e0; padding: 16px 20px; border-radius: 8px; margin: 16px 0; font-family: 'JetBrains Mono', monospace; font-size: 10pt; line-height: 1.9; }
+.formula-box .result { color: var(--gold3); font-weight: 700; }
+.formula-box .var { color: #00F5FF; }
+.formula-box .label { color: #94a3b8; font-size: 9pt; }
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 10pt; }
+th { background: var(--navy); color: var(--white); padding: 10px 12px; text-align: left; font-weight: 600; font-size: 9pt; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:hover { background: var(--light2); }
+.pillar-card { border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--gold); }
+.pillar-card h4 { margin-top: 0; }
+.audience-card { background: var(--light); border-radius: 8px; padding: 16px 20px; margin: 12px 0; border-top: 3px solid var(--teal); }
+.audience-card h4 { color: var(--teal); margin-top: 0; }
+.channel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+.channel-item { background: var(--light); padding: 16px; border-radius: 8px; text-align: center; border-top: 3px solid var(--navy); }
+.channel-item .ch-name { font-weight: 700; font-size: 10pt; color: var(--navy); margin-bottom: 6px; }
+.channel-item .ch-desc { font-size: 9pt; color: var(--dim); }
+.timeline-row { display: flex; gap: 8px; align-items: stretch; margin: 16px 0; }
+.timeline-q { flex: 1; background: var(--light); padding: 14px; border-radius: 8px; border-top: 3px solid var(--gold); font-size: 9.5pt; }
+.timeline-q strong { display: block; color: var(--navy); margin-bottom: 6px; }
+.do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+.do-col { background: #ECFDF5; padding: 16px; border-radius: 8px; border-left: 4px solid var(--green); }
+.dont-col { background: #FEF2F2; padding: 16px; border-radius: 8px; border-left: 4px solid var(--red); }
+.do-col h4, .dont-col h4 { margin-top: 0; font-size: 10pt; }
+.do-col h4 { color: var(--green); }
+.dont-col h4 { color: var(--red); }
+.do-col p, .dont-col p { font-size: 9.5pt; margin-bottom: 8px; text-align: left; }
+.en { display: block; } .ua { display: none; }
+body.ua-mode .en { display: none; } body.ua-mode .ua { display: block; }
+@media (max-width: 768px) { .channel-grid { grid-template-columns: 1fr; } .do-dont { grid-template-columns: 1fr; } .timeline-row { flex-direction: column; } }
+@media print { .lang-bar { display: none; } body { font-size: 10pt; } .page { box-shadow: none; padding: 20px; } }
+</style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="document.body.classList.remove('ua-mode'); this.classList.add('active'); this.nextElementSibling.classList.remove('active');">EN</button>
+  <button class="lang-btn" onclick="document.body.classList.add('ua-mode'); this.classList.add('active'); this.previousElementSibling.classList.remove('active');">UA</button>
+</div>
+
+<div class="page">
+
+<div class="cover">
+  <h1><span style="color:#fff">F</span><span style="color:#D4A017">E</span><span style="color:rgba(255,255,255,0.55)">E</span><span style="color:rgba(255,255,255,0.3)">L</span> <span style="color:#D4A017">Again</span></h1>
+  <div class="subtitle">
+    <span class="en">Document 5: Communication Strategy</span>
+    <span class="ua">Документ 5: Комунікаційна стратегія</span>
+  </div>
+  <div class="meta">
+    <span class="en">v1.0 | March 2026 | Bilingual Working Document</span>
+    <span class="ua">v1.0 | Березень 2026 | Двомовний робочий документ</span><br>
+    <span class="en">All quantitative claims reference Document 4 (Canonical Dataset) as single source of truth</span>
+    <span class="ua">Усі кількісні твердження посилаються на Документ 4 (Канонічний датасет) як єдине джерело правди</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ 1. STRATEGIC CONTEXT ═══════════════════ -->
+
+<h2 id="s1">
+  <span class="en">1. Strategic Communication Context</span>
+  <span class="ua">1. Стратегічний комунікаційний контекст</span>
+</h2>
+
+<div class="en">
+<p>FEEL Again faces a communication challenge more complex than most infrastructure projects. The programme must simultaneously explain its nature (digital financial rails — not a mental health service provider), differentiate itself from existing initiatives (without criticizing them), overcome scepticism born of years of donor-funded training programmes that delivered certificates but not practitioners, and do all of this in a sector where language itself carries clinical weight. Every word matters: how we describe the crisis shapes how stakeholders perceive the solution.</p>
+
+<p>The communication strategy is inseparable from the programme's strategic framework (Document 2) and operational portfolio (Document 3). It is not an add-on. Failure to communicate correctly produces concrete operational damage: a mispositioned pitch to the World Bank triggers the wrong procurement category; an aggressive stance toward the First Lady's programme ТИ ЯК? closes political doors that cannot be reopened; a promise of "therapy for all" creates expectations the infrastructure layer is not designed to fulfil.</p>
+
+<p>This document defines what FEEL Again says, to whom, through which channels, and — critically — what it does not say.</p>
+</div>
+<div class="ua">
+<p>FEEL Again стикається з комунікаційним викликом складнішим, ніж у більшості інфраструктурних проєктів. Програма повинна одночасно пояснити свою природу (цифрові фінансові рейки — а не надавач послуг психічного здоров'я), диференціюватись від існуючих ініціатив (не критикуючи їх), подолати скепсис, народжений роками донорських тренінгових програм, які видавали сертифікати, але не практиків, і зробити все це в секторі, де сама мова має клінічну вагу. Кожне слово має значення: те, як ми описуємо кризу, формує те, як стейкхолдери сприймають рішення.</p>
+
+<p>Комунікаційна стратегія невіддільна від стратегічної рамки програми (Документ 2) та операційного портфелю (Документ 3). Це не додаток. Неправильна комунікація завдає конкретної операційної шкоди: неправильно позиціонований пітч Світовому банку запускає хибну категорію закупівлі; агресивна позиція щодо програми Першої леді ТИ ЯК? закриває політичні двері, які не можна відкрити знову; обіцянка «терапії для всіх» створює очікування, для яких інфраструктурний шар не призначений.</p>
+
+<p>Цей документ визначає, що FEEL Again каже, кому, через які канали, і — критично — чого не каже.</p>
+</div>
+
+<!-- ═══════════════════ 2. CORE NARRATIVE ═══════════════════ -->
+
+<h2 id="s2">
+  <span class="en">2. Core Narrative Architecture</span>
+  <span class="ua">2. Архітектура ключового наративу</span>
+</h2>
+
+<div class="crisis-box">
+  <div class="en"><strong>The One-Sentence Pitch:</strong> FEEL Again builds the financial and data infrastructure that connects those who need mental health support in Ukraine with those who can provide it — making invisible services visible, unfunded services fundable, and unaccountable services accountable.</div>
+  <div class="ua"><strong>Пітч в одне речення:</strong> FEEL Again будує фінансову та дата-інфраструктуру, що з'єднує тих, хто потребує підтримки психічного здоров'я в Україні, з тими, хто може її надати — роблячи невидимі послуги видимими, нефінансовані послуги фінансованими, а непідзвітні послуги підзвітними.</div>
+</div>
+
+<h3 id="s2-1">
+  <span class="en">2.1 The Narrative Logic</span>
+  <span class="ua">2.1 Наративна логіка</span>
+</h3>
+
+<div class="en">
+<p>The FEEL Again narrative follows a four-step logic chain that must be preserved in every communication, regardless of audience or format. Breaking the chain — for instance, jumping from crisis statistics to programme features — produces confusion and scepticism.</p>
+
+<p><strong>Step 1: The Scale.</strong> Ukraine has 9.6 million people at elevated mental health risk (WHO, 2025). 3.9 million need clinical intervention (Lancet, 2023). 71% of Ukrainians report needing support, yet only 17% have sought it (Gradus, 2024). These are not aspirational numbers — they are verified epidemiological data. <span class="ref">[Doc 4, §1.1, §1.3, §2.1]</span></p>
+
+<p><strong>Step 2: The Impossibility.</strong> The crisis cannot be solved by adding more of what already exists. 154,500 people have been trained in mental health protocols — yet only 42 are practising as structured, accountable, funded professionals (Document 2, §1.2). The backlog stands at 62.4 million hours, requiring 7.8–12 years to clear even at full workforce capacity (Document 2, §1.4). The HEAL programme ($500M) has delivered 0 of 400 planned facility upgrades (ISR #6). Training fails because there is nowhere to practise. Facilities fail because there is no measurement system. Measurement fails because there are no financial rails. <span class="ref">[Doc 4, §3.1, §5.1; Doc 2, §1]</span></p>
+
+<p><strong>Step 3: The Infrastructure Gap.</strong> What is missing is not funding, not training, not will — but plumbing. Specifically: a provider registry (who can deliver care), a session metering engine (did the care happen, what was the outcome), a payment system (how does money flow to verified outcomes), and a data layer that makes all of this visible. These are rails, not trains. <span class="ref">[Doc 1, §3; Doc 3, Cluster A]</span></p>
+
+<p><strong>Step 4: FEEL Again.</strong> The programme builds these rails. Providers register, sessions are metered against validated clinical instruments (PCL-5, PHQ-9, GAD-7), outcomes are published, payments clear automatically against results. Donor money reaches verified impact. State systems (ESOZ) get data they can count. Professionals get a formal pathway out of the shadow sector. Citizens get access to findable, affordable, accountable care. <span class="ref">[Doc 1, §4; Doc 3, Portfolio]</span></p>
+</div>
+<div class="ua">
+<p>Наратив FEEL Again слідує чотирикроковому логічному ланцюгу, який повинен зберігатися в кожній комунікації, незалежно від аудиторії чи формату. Розрив ланцюга — наприклад, стрибок від кризової статистики до функцій програми — створює плутанину та скепсис.</p>
+
+<p><strong>Крок 1: Масштаб.</strong> В Україні 9,6 мільйонів людей з підвищеним ризиком для психічного здоров'я (ВООЗ, 2025). 3,9 мільйонів потребують клінічного втручання (Lancet, 2023). 71% українців повідомляють про потребу в підтримці, проте лише 17% звернулись (Gradus, 2024). Це не ідеалістичні числа — це верифіковані епідеміологічні дані. <span class="ref">[Док 4, §1.1, §1.3, §2.1]</span></p>
+
+<p><strong>Крок 2: Неможливість.</strong> Кризу неможливо вирішити, додаючи більше того, що вже існує. 154 500 людей навчено протоколам психічного здоров'я — але лише 42 практикують як структуровані, підзвітні, фінансовані фахівці (Документ 2, §1.2). Бекlog складає 62,4 мільйонів годин, потребуючи 7,8–12 років для ліквідації навіть при повній потужності кадрів (Документ 2, §1.4). Програма HEAL ($500M) реалізувала 0 з 400 запланованих модернізацій закладів (ISR #6). Тренінги провалюються, бо нема де практикувати. Заклади провалюються, бо нема системи вимірювання. Вимірювання провалюється, бо нема фінансових рейок. <span class="ref">[Док 4, §3.1, §5.1; Док 2, §1]</span></p>
+
+<p><strong>Крок 3: Інфраструктурна прогалина.</strong> Бракує не фінансування, не тренінгів, не волі — а сантехніки. Конкретно: реєстр надавачів (хто може надавати допомогу), двигун метрування сесій (чи відбулась допомога, який результат), платіжна система (як гроші потрапляють до верифікованих результатів), і шар даних, що робить все це видимим. Це рейки, а не потяги. <span class="ref">[Док 1, §3; Док 3, Кластер A]</span></p>
+
+<p><strong>Крок 4: FEEL Again.</strong> Програма будує ці рейки. Надавачі реєструються, сесії метруються за валідованими клінічними інструментами (PCL-5, PHQ-9, GAD-7), результати публікуються, платежі клірингуються автоматично за результатами. Донорські гроші досягають верифікованого впливу. Державні системи (ЕСОЗ) отримують дані, які можна рахувати. Професіонали отримують формальний шлях з тіньового сектору. Громадяни отримують доступ до знаходжуваної, фінансово доступної, підзвітної допомоги. <span class="ref">[Док 1, §4; Док 3, Портфель]</span></p>
+</div>
+
+<h3 id="s2-2">
+  <span class="en">2.2 Three Narrative Pillars</span>
+  <span class="ua">2.2 Три наративних стовпи</span>
+</h3>
+
+<div class="pillar-card">
+  <h4><span class="en">Pillar 1: Rails, Not Trains</span><span class="ua">Стовп 1: Рейки, а не потяги</span></h4>
+  <div class="en"><p>FEEL Again does not provide therapy. It does not train therapists. It builds the infrastructure that makes therapy findable, fundable, and accountable. This distinction is non-negotiable in every communication. The analogy: Visa does not sell products, but without Visa, the products cannot be sold. FEEL Again does not deliver mental health services, but without FEEL Again, the services cannot be delivered at scale, measured, or sustained.</p></div>
+  <div class="ua"><p>FEEL Again не надає терапію. Не навчає терапевтів. Будує інфраструктуру, яка робить терапію знаходжуваною, фінансованою та підзвітною. Це розмежування є безумовним у кожній комунікації. Аналогія: Visa не продає товари, але без Visa товари не можна продати. FEEL Again не надає послуги психічного здоров'я, але без FEEL Again послуги не можуть бути надані в масштабі, виміряні чи підтримані.</p></div>
+</div>
+
+<div class="pillar-card">
+  <h4><span class="en">Pillar 2: Verified Data, Not Promises</span><span class="ua">Стовп 2: Верифіковані дані, а не обіцянки</span></h4>
+  <div class="en"><p>Every quantitative claim in FEEL Again communications must trace to Document 4 (Canonical Dataset). No fabricated projections. No aspirational figures. When the data says "0 of 400 facilities upgraded" — we say that. When the training conversion rate is &lt;0.03% — we report it. This radical transparency is a strategic asset: in a sector saturated with inflated impact reports, FEEL Again's credibility comes from saying what is real, not what sounds good. Conservative projections are the only projections.</p></div>
+  <div class="ua"><p>Кожне кількісне твердження в комунікаціях FEEL Again повинно простежуватися до Документа 4 (Канонічний датасет). Ніяких сфабрикованих прогнозів. Ніяких ідеалістичних цифр. Коли дані кажуть «0 з 400 модернізованих закладів» — ми це кажемо. Коли конверсія тренінгів &lt;0,03% — ми це повідомляємо. Ця радикальна прозорість є стратегічним активом: у секторі, перенасиченому завищеними звітами про вплив, довіра FEEL Again побудована на тому, щоб говорити те, що є, а не те, що звучить добре. Консервативні прогнози — єдині прогнози.</p></div>
+</div>
+
+<div class="pillar-card">
+  <h4><span class="en">Pillar 3: Complementarity, Not Competition</span><span class="ua">Стовп 3: Компліментарність, а не конкуренція</span></h4>
+  <div class="en"><p>FEEL Again positions itself as infrastructure that amplifies existing programmes, never as their replacement or critique. The First Lady's programme ТИ ЯК? reached millions with awareness and destigmatization — FEEL Again provides the rails for people who responded to that message and now need to find an actual provider. HEAL ($500M) builds physical facilities — FEEL Again provides the data layer that measures what happens inside them. THRIVE ($454M) pays for results — FEEL Again provides the digital bus that makes results countable. The MHPSS TWG coordinates 450+ organizations — FEEL Again provides the open dataset that replaces manual 4W reporting. Every existing actor gains from this infrastructure. None are threatened by it.</p></div>
+  <div class="ua"><p>FEEL Again позиціонує себе як інфраструктуру, що підсилює існуючі програми, ніколи — як їх заміну чи критику. Програма Першої леді ТИ ЯК? охопила мільйони обізнаністю та дестигматизацією — FEEL Again надає рейки для людей, які відгукнулись на це повідомлення і тепер потребують знайти реального надавача. HEAL ($500M) будує фізичні заклади — FEEL Again надає шар даних, що вимірює те, що відбувається всередині них. THRIVE ($454M) платить за результати — FEEL Again надає цифрову шину, що робить результати вимірюваними. MHPSS TWG координує 450+ організацій — FEEL Again надає відкритий датасет, що замінює ручну 4W-звітність. Кожен існуючий актор виграє від цієї інфраструктури. Жоден нею не загрожений.</p></div>
+</div>
+
+<!-- ═══════════════════ 3. AUDIENCE MAPPING ═══════════════════ -->
+
+<h2 id="s3">
+  <span class="en">3. Audience Mapping & Messaging Matrix</span>
+  <span class="ua">3. Карта аудиторій та матриця повідомлень</span>
+</h2>
+
+<div class="en">
+<p>Each audience cares about different dimensions of FEEL Again. A single message cannot serve all. The matrix below defines the primary concern, core message, supporting evidence, and communication tone for each stakeholder group. Every message must respect the four-step narrative logic (§2.1) while leading with the concern most salient to the recipient.</p>
+</div>
+<div class="ua">
+<p>Кожна аудиторія турбується про різні виміри FEEL Again. Одне повідомлення не може обслужити всіх. Матриця нижче визначає первинне занепокоєння, ключове повідомлення, підтверджуючі дані та тон комунікації для кожної групи стейкхолдерів. Кожне повідомлення повинно поважати чотирикрокову наративну логіку (§2.1), при цьому лідируючи із занепокоєнням, найбільш важливим для отримувача.</p>
+</div>
+
+<div class="audience-card">
+  <h4><span class="en">Audience A: World Bank & International Donors</span><span class="ua">Аудиторія A: Світовий банк та міжнародні донори</span></h4>
+  <table>
+  <tr><th style="width:25%"><span class="en">Dimension</span><span class="ua">Вимір</span></th><th><span class="en">Content</span><span class="ua">Зміст</span></th></tr>
+  <tr><td><strong><span class="en">Primary concern</span><span class="ua">Головне занепокоєння</span></strong></td><td><span class="en">Value-for-money, results verification, disbursement-linked indicators (DLIs), complementarity with HEAL/THRIVE</span><span class="ua">Вартість за гроші, верифікація результатів, прив'язані до виплат індикатори (DLI), компліментарність з HEAL/THRIVE</span></td></tr>
+  <tr><td><strong><span class="en">Core message</span><span class="ua">Ключове повідомлення</span></strong></td><td><span class="en">FEEL Again is the measurement and payment infrastructure that makes HEAL's facility investments and THRIVE's PforR results countable. Component 4's $41M unallocated digitalization budget has a ready-made pipeline.</span><span class="ua">FEEL Again — інфраструктура вимірювання та платежів, яка робить інвестиції HEAL в заклади та результати THRIVE PforR вимірюваними. $41M нерозподілений бюджет Component 4 на цифровізацію має готовий пайплайн.</span> <span class="ref">[Doc 4, §5.2]</span></td></tr>
+  <tr><td><strong><span class="en">Evidence chain</span><span class="ua">Доказовий ланцюг</span></strong></td><td><span class="en">ISR #6 data (0/400 facilities, 624K services), THRIVE DLI structure, AMP MH proof of concept (147K e-prescriptions), ESOZ integration pathway, Year 1 budget ~€1.04M (~$1.1M) vs potential unlocked: $41M+ Component 4</span><span class="ua">Дані ISR #6 (0/400 закладів, 624K послуг), структура DLI THRIVE, proof of concept AMP MH (147K е-рецептів), шлях інтеграції ЕСОЗ, бюджет Рік 1 ~€1,04M (~$1,1M) проти потенційно розблокованих: $41M+ Component 4</span> <span class="ref">[Doc 4, §5.1-5.3; Doc 3, Budget]</span></td></tr>
+  <tr><td><strong><span class="en">Tone</span><span class="ua">Тон</span></strong></td><td><span class="en">Technical, data-dense, conservative. Lead with DLI alignment. Zero aspirational language.</span><span class="ua">Технічний, насичений даними, консервативний. Лідирувати з DLI-вирівнюванням. Нуль ідеалістичної мови.</span></td></tr>
+  </table>
+</div>
+
+<div class="audience-card">
+  <h4><span class="en">Audience B: Ukrainian Government (MoH, NSSU, NAQA)</span><span class="ua">Аудиторія B: Уряд України (МОЗ, НСЗУ, НАЗЯВО)</span></h4>
+  <table>
+  <tr><th style="width:25%"><span class="en">Dimension</span><span class="ua">Вимір</span></th><th><span class="en">Content</span><span class="ua">Зміст</span></th></tr>
+  <tr><td><strong><span class="en">Primary concern</span><span class="ua">Головне занепокоєння</span></strong></td><td><span class="en">ESOZ compatibility, Law 4223-IX implementation, regulatory compliance, national ownership</span><span class="ua">Сумісність з ЕСОЗ, реалізація Закону 4223-IX, регуляторна відповідність, національне володіння</span></td></tr>
+  <tr><td><strong><span class="en">Core message</span><span class="ua">Ключове повідомлення</span></strong></td><td><span class="en">FEEL Again provides the digital tool that implements what Law 4223-IX mandates and what ESOZ needs: a certification pathway for psychotherapy SROs, session metering that feeds ESOZ via HL7 FHIR R4, and a path to formalize the shadow sector without losing its workforce.</span><span class="ua">FEEL Again надає цифровий інструмент, що реалізує те, що вимагає Закон 4223-IX і що потребує ЕСОЗ: шлях сертифікації для СРО психотерапії, метрування сесій, що живить ЕСОЗ через HL7 FHIR R4, та шлях формалізації тіньового сектору без втрати його кадрів.</span> <span class="ref">[Doc 2, §1.3; Doc 3, A1-A3]</span></td></tr>
+  <tr><td><strong><span class="en">Evidence chain</span><span class="ua">Доказовий ланцюг</span></strong></td><td><span class="en">Formalization cost (€979/month penalty per provider delayed). AMP MH precedent (147K prescriptions already in ESOZ). 2,000+ shadow-sector providers who serve ~1.8M sessions/year but generate zero state data.</span><span class="ua">Вартість формалізації (€979/місяць штрафу за кожного затриманого надавача). Прецедент AMP MH (147K рецептів вже в ЕСОЗ). 2 000+ надавачів тіньового сектору, які обслуговують ~1,8M сесій/рік, але генерують нуль державних даних.</span> <span class="ref">[Doc 4, §4.1-4.3; Doc 2, §1.3]</span></td></tr>
+  <tr><td><strong><span class="en">Tone</span><span class="ua">Тон</span></strong></td><td><span class="en">Formal, policy-oriented, regulatory language. Emphasize Ukrainian ownership and sovereignty. FEEL Again as enabler of state policy, not substitute for it.</span><span class="ua">Формальний, політико-орієнтований, регуляторна мова. Акцент на українському володінні та суверенітеті. FEEL Again як засіб реалізації державної політики, а не її заміна.</span></td></tr>
+  </table>
+</div>
+
+<div class="audience-card">
+  <h4><span class="en">Audience C: Mental Health Professionals</span><span class="ua">Аудиторія C: Фахівці психічного здоров'я</span></h4>
+  <table>
+  <tr><th style="width:25%"><span class="en">Dimension</span><span class="ua">Вимір</span></th><th><span class="en">Content</span><span class="ua">Зміст</span></th></tr>
+  <tr><td><strong><span class="en">Primary concern</span><span class="ua">Головне занепокоєння</span></strong></td><td><span class="en">Income stability, formalization burden, professional recognition, clinical autonomy</span><span class="ua">Стабільність доходу, тягар формалізації, професійне визнання, клінічна автономія</span></td></tr>
+  <tr><td><strong><span class="en">Core message</span><span class="ua">Ключове повідомлення</span></strong></td><td><span class="en">FEEL Again reduces the cost of entering the formal sector, provides stable client flow through the platform, measures outcomes so your work is visible and valued, and creates a pathway from training certificate to paid practice. The platform works for you, not on you.</span><span class="ua">FEEL Again знижує вартість входу у формальний сектор, забезпечує стабільний потік клієнтів через платформу, вимірює результати, щоб ваша робота була видимою та цінованою, і створює шлях від тренінгового сертифікату до оплачуваної практики. Платформа працює для вас, а не над вами.</span></td></tr>
+  <tr><td><strong><span class="en">Evidence chain</span><span class="ua">Доказовий ланцюг</span></strong></td><td><span class="en">Formalization penalty: direct cost €207/month + opportunity cost €958/month = €979/month total. Currently 154,500 trained → 42 practising (&lt;0.03% conversion). FEEL Again creates the pathway that converts certificates into careers.</span><span class="ua">Штраф формалізації: прямий cost €207/місяць + opportunity cost €958/місяць = €979/місяць загалом. Зараз 154 500 навчених → 42 практикують (&lt;0,03% конверсія). FEEL Again створює шлях, що перетворює сертифікати на кар'єри.</span> <span class="ref">[Doc 4, §4.2; Doc 2, §1.3]</span></td></tr>
+  <tr><td><strong><span class="en">Tone</span><span class="ua">Тон</span></strong></td><td><span class="en">Empathetic, practical, peer-level. Acknowledge the real difficulty of the current situation. Zero condescension. Concrete economic benefits first, vision second.</span><span class="ua">Емпатичний, практичний, на рівних. Визнати реальну складність поточної ситуації. Нуль зверхності. Конкретні економічні вигоди спочатку, бачення — потім.</span></td></tr>
+  </table>
+</div>
+
+<div class="audience-card">
+  <h4><span class="en">Audience D: MHPSS TWG & Civil Society</span><span class="ua">Аудиторія D: MHPSS TWG та громадянське суспільство</span></h4>
+  <table>
+  <tr><th style="width:25%"><span class="en">Dimension</span><span class="ua">Вимір</span></th><th><span class="en">Content</span><span class="ua">Зміст</span></th></tr>
+  <tr><td><strong><span class="en">Primary concern</span><span class="ua">Головне занепокоєння</span></strong></td><td><span class="en">Coordination burden, reporting fatigue, visibility of their own work, data access</span><span class="ua">Тягар координації, втома від звітності, видимість їхньої роботи, доступ до даних</span></td></tr>
+  <tr><td><strong><span class="en">Core message</span><span class="ua">Ключове повідомлення</span></strong></td><td><span class="en">FEEL Again replaces manual 4W reporting with automated open data. Your organization's contribution becomes visible in a national dataset without adding reporting burden. The open dashboard (dashboard.feelagain.me) is already live.</span><span class="ua">FEEL Again замінює ручну 4W-звітність автоматизованими відкритими даними. Внесок вашої організації стає видимим у національному датасеті без додаткового тягаря звітності. Відкритий дашборд (dashboard.feelagain.me) вже працює.</span> <span class="ref">[Doc 3, A4; Doc 4]</span></td></tr>
+  <tr><td><strong><span class="en">Tone</span><span class="ua">Тон</span></strong></td><td><span class="en">Collegial, service-oriented. Position FEEL Again as shared infrastructure that serves the sector, not as external intervention. Emphasize data commons, open access, IATI compliance.</span><span class="ua">Колегіальний, сервіс-орієнтований. Позиціонувати FEEL Again як спільну інфраструктуру, що обслуговує сектор, а не зовнішнє втручання. Акцент на спільних даних, відкритому доступі, IATI-відповідності.</span></td></tr>
+  </table>
+</div>
+
+<div class="audience-card">
+  <h4><span class="en">Audience E: Platform Operators (Enkidu, Quoroom/HighCastle Technologies)</span><span class="ua">Аудиторія E: Платформні оператори (Enkidu, Quoroom/HighCastle Technologies)</span></h4>
+  <table>
+  <tr><th style="width:25%"><span class="en">Dimension</span><span class="ua">Вимір</span></th><th><span class="en">Content</span><span class="ua">Зміст</span></th></tr>
+  <tr><td><strong><span class="en">Primary concern</span><span class="ua">Головне занепокоєння</span></strong></td><td><span class="en">Technical architecture, API specifications, revenue model, data governance, scaling path</span><span class="ua">Технічна архітектура, специфікації API, модель доходу, управління даними, шлях масштабування</span></td></tr>
+  <tr><td><strong><span class="en">Core message</span><span class="ua">Ключове повідомлення</span></strong></td><td><span class="en">FEEL Again provides the spec and the market. Platform operators build to spec and serve the market. The architecture is designed for multi-operator deployment — no single vendor lock-in. Commission model (2.5-7% degressive) aligns incentives: platform earns more when outcome-verified volume grows.</span><span class="ua">FEEL Again надає специфікацію і ринок. Платформні оператори будують за специфікацією та обслуговують ринок. Архітектура спроєктована для мульти-операторного розгортання — без прив'язки до одного вендора. Комісійна модель (2,5-7% дегресивна) вирівнює стимули: платформа заробляє більше, коли зростає обсяг верифікованих результатів.</span> <span class="ref">[Doc 1, §7; Doc 3, A5]</span></td></tr>
+  <tr><td><strong><span class="en">Tone</span><span class="ua">Тон</span></strong></td><td><span class="en">Technical, business-focused, partnership-oriented. Lead with architecture and economics. Share API documentation and integration roadmaps.</span><span class="ua">Технічний, бізнес-орієнтований, партнерський. Лідирувати з архітектурою та економікою. Ділитися API-документацією та дорожніми картами інтеграції.</span></td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════ 4. LANGUAGE DISCIPLINE ═══════════════════ -->
+
+<h2 id="s4">
+  <span class="en">4. Language Discipline: Permitted & Prohibited Framings</span>
+  <span class="ua">4. Мовна дисципліна: дозволені та заборонені формулювання</span>
+</h2>
+
+<div class="en">
+<p>In MHPSS communications, language errors are operational errors. Promising "therapy for all" when the programme builds infrastructure invites the wrong funding category, the wrong stakeholder expectations, and the wrong evaluation criteria. The following framings are binding on all FEEL Again communications — internal, external, formal, and informal.</p>
+</div>
+<div class="ua">
+<p>У комунікаціях МЗПСП мовні помилки — це операційні помилки. Обіцяти «терапію для всіх», коли програма будує інфраструктуру, запрошує хибну категорію фінансування, хибні очікування стейкхолдерів та хибні критерії оцінки. Наступні формулювання є обов'язковими для всіх комунікацій FEEL Again — внутрішніх, зовнішніх, формальних та неформальних.</p>
+</div>
+
+<div class="do-dont">
+  <div class="do-col">
+    <h4><span class="en">✓ Always Say</span><span class="ua">✓ Завжди кажемо</span></h4>
+    <p><span class="en">"Infrastructure" / "financial rails" / "digital plumbing"</span><span class="ua">«Інфраструктура» / «фінансові рейки» / «цифрова сантехніка»</span></p>
+    <p><span class="en">"Measurement and payment system"</span><span class="ua">«Система вимірювання та платежів»</span></p>
+    <p><span class="en">"Outcome-verified" / "data-driven"</span><span class="ua">«Верифіковано за результатом» / «на основі даних»</span></p>
+    <p><span class="en">"Complements [programme name]" / "enables [programme name]"</span><span class="ua">«Доповнює [назва програми]» / «забезпечує [назва програми]»</span></p>
+    <p><span class="en">"Conservative estimate" / "verified by [source]"</span><span class="ua">«Консервативна оцінка» / «верифіковано [джерелом]»</span></p>
+    <p><span class="en">"Ukrainian-owned" / "sovereign data infrastructure"</span><span class="ua">«Українське володіння» / «суверенна дата-інфраструктура»</span></p>
+  </div>
+  <div class="dont-col">
+    <h4><span class="en">✗ Never Say</span><span class="ua">✗ Ніколи не кажемо</span></h4>
+    <p><span class="en">"We provide therapy" / "mental health service"</span><span class="ua">«Ми надаємо терапію» / «послуга психічного здоров'я»</span></p>
+    <p><span class="en">"Replacing [any existing programme]" / "better than [programme]"</span><span class="ua">«Замінюємо [будь-яку існуючу програму]» / «краще ніж [програма]»</span></p>
+    <p><span class="en">"Revolutionary" / "unprecedented" / "disrupting"</span><span class="ua">«Революційний» / «безпрецедентний» / «руйнівний»</span></p>
+    <p><span class="en">Any criticism of ТИ ЯК?, HEAL, THRIVE, or MHPSS TWG</span><span class="ua">Будь-яка критика ТИ ЯК?, HEAL, THRIVE чи MHPSS TWG</span></p>
+    <p><span class="en">Unattributed statistics / round-number estimates without source</span><span class="ua">Статистика без джерела / округлені оцінки без посилання</span></p>
+    <p><span class="en">"App" / "startup" / "disrupt" / "unicorn" / "moonshot"</span><span class="ua">«Додаток» / «стартап» / «дизрапт» / «єдиноріг» / «місячний постріл»</span></p>
+  </div>
+</div>
+
+<div class="warning-box">
+  <div class="en"><strong>Critical rule regarding ТИ ЯК?:</strong> The First Lady's programme is a national awareness initiative that reached millions of Ukrainians with destigmatization messaging. FEEL Again's only permissible framing is that it provides infrastructure for people who responded to ТИ ЯК?'s message and now need to find a provider. Any tonal deviation — implicit criticism, comparative language, or positioning "above" ТИ ЯК? — closes doors that are structurally impossible to reopen. This is not a guideline. It is a red line.</div>
+  <div class="ua"><strong>Критичне правило щодо ТИ ЯК?:</strong> Програма Першої леді — це національна ініціатива обізнаності, яка охопила мільйони українців повідомленнями про дестигматизацію. Єдине дозволене формулювання FEEL Again полягає в тому, що програма надає інфраструктуру для людей, які відгукнулись на повідомлення ТИ ЯК? і тепер потребують знайти надавача. Будь-яке тональне відхилення — імпліцитна критика, порівняльна мова чи позиціонування «над» ТИ ЯК? — закриває двері, які структурно неможливо відкрити знову. Це не рекомендація. Це червона лінія.</div>
+</div>
+
+<!-- ═══════════════════ 5. CHANNEL STRATEGY ═══════════════════ -->
+
+<h2 id="s5">
+  <span class="en">5. Channel Strategy</span>
+  <span class="ua">5. Канальна стратегія</span>
+</h2>
+
+<div class="en">
+<p>FEEL Again uses a layered channel strategy where each channel serves a specific audience at a specific stage of engagement. The primary constraint is credibility: as an early-stage infrastructure programme, FEEL Again's communication must earn authority through data, demonstrated capability (the live dashboard), and institutional partnerships — not through volume or virality.</p>
+</div>
+<div class="ua">
+<p>FEEL Again використовує шарову канальну стратегію, де кожен канал обслуговує конкретну аудиторію на конкретній стадії залучення. Первинне обмеження — довіра: як інфраструктурна програма ранньої стадії, комунікація FEEL Again повинна здобувати авторитет через дані, продемонстровану спроможність (працюючий дашборд) та інституційні партнерства — а не через обсяг чи вірусність.</p>
+</div>
+
+<div class="channel-grid">
+  <div class="channel-item">
+    <div class="ch-name"><span class="en">Open Data Dashboard</span><span class="ua">Дашборд відкритих даних</span></div>
+    <div class="ch-desc"><span class="en">dashboard.feelagain.me — live, bilingual, real-time verified data. Primary credibility anchor. Audiences: all.</span><span class="ua">dashboard.feelagain.me — живий, двомовний, верифіковані дані в реальному часі. Первинний якір довіри. Аудиторії: всі.</span></div>
+  </div>
+  <div class="channel-item">
+    <div class="ch-name"><span class="en">Document Package</span><span class="ua">Пакет документів</span></div>
+    <div class="ch-desc"><span class="en">Docs 1-5: Master, Strategic, Operational, Data, Communication. Tailored for institutional stakeholders. Audiences: A, B, E.</span><span class="ua">Доки 1-5: Майстер, Стратегічний, Операційний, Дані, Комунікація. Адаптовано для інституційних стейкхолдерів. Аудиторії: A, B, E.</span></div>
+  </div>
+  <div class="channel-item">
+    <div class="ch-name"><span class="en">IATI Publications</span><span class="ua">Публікації IATI</span></div>
+    <div class="ch-desc"><span class="en">Quarterly open data publications (IATI 2.03 compliant). Machine-readable. Audiences: A, D.</span><span class="ua">Квартальні публікації відкритих даних (IATI 2.03). Машинозчитувані. Аудиторії: A, D.</span></div>
+  </div>
+  <div class="channel-item">
+    <div class="ch-name"><span class="en">feelagain.me Website</span><span class="ua">Вебсайт feelagain.me</span></div>
+    <div class="ch-desc"><span class="en">Public-facing site: narrative, team, document access, dashboard link. Gateway for all audiences. Progressive disclosure: simple → detailed.</span><span class="ua">Публічний сайт: наратив, команда, доступ до документів, посилання на дашборд. Вхідні ворота для всіх аудиторій. Прогресивне розкриття: просте → детальне.</span></div>
+  </div>
+  <div class="channel-item">
+    <div class="ch-name"><span class="en">Donor Briefing Decks</span><span class="ua">Брифінги для донорів</span></div>
+    <div class="ch-desc"><span class="en">Tailored presentations generated from Document 4 data + Donor Scoring matrix. Per-donor customization. Audiences: A.</span><span class="ua">Адаптовані презентації з даних Документа 4 + матриця скорингу донорів. Кастомізація під кожного донора. Аудиторії: A.</span></div>
+  </div>
+  <div class="channel-item">
+    <div class="ch-name"><span class="en">MHPSS TWG Sessions</span><span class="ua">Сесії MHPSS TWG</span></div>
+    <div class="ch-desc"><span class="en">Regular presentations at TWG coordination meetings. Dashboard live-demo. Audiences: D, B.</span><span class="ua">Регулярні презентації на координаційних зустрічах TWG. Живе демо дашборду. Аудиторії: D, B.</span></div>
+  </div>
+</div>
+
+<h3 id="s5-1">
+  <span class="en">5.1 Channel Deployment by Phase</span>
+  <span class="ua">5.1 Розгортання каналів за фазами</span>
+</h3>
+
+<div class="timeline-row">
+  <div class="timeline-q">
+    <strong><span class="en">Phase 1: Foundation (M1-M6)</span><span class="ua">Фаза 1: Фундамент (M1-M6)</span></strong>
+    <span class="en">Dashboard live + Document Package ready. Website v1. First IATI publication. First TWG presentation. Focus: institutional credibility. No public campaigns.</span>
+    <span class="ua">Дашборд працює + Пакет документів готовий. Вебсайт v1. Перша публікація IATI. Перша презентація TWG. Фокус: інституційна довіра. Ніяких публічних кампаній.</span>
+  </div>
+  <div class="timeline-q">
+    <strong><span class="en">Phase 2: Traction (M7-M12)</span><span class="ua">Фаза 2: Тяга (M7-M12)</span></strong>
+    <span class="en">Provider onboarding begins → first case studies. Donor briefings with real data. Government MOU discussions. Blog/newsletter launch with verified outcome data. Focus: demonstrated capability.</span>
+    <span class="ua">Початок онбордингу надавачів → перші кейс-стаді. Брифінги донорів з реальними даними. Обговорення MOU з урядом. Запуск блогу/розсилки з верифікованими даними результатів. Фокус: продемонстрована спроможність.</span>
+  </div>
+  <div class="timeline-q">
+    <strong><span class="en">Phase 3: Scale (M13-M24)</span><span class="ua">Фаза 3: Масштаб (M13-M24)</span></strong>
+    <span class="en">ESOZ integration live → government-facing communications. Impact reports with PCL-5/PHQ-9 delta data. Conference presentations (Global Mental Health, MHPSS Alliance). Media engagement on verified outcomes. Focus: systemic integration.</span>
+    <span class="ua">Інтеграція ЕСОЗ запущена → урядово-орієнтовані комунікації. Звіти впливу з даними дельти PCL-5/PHQ-9. Конференційні презентації (Global Mental Health, MHPSS Alliance). Взаємодія з медіа на верифікованих результатах. Фокус: системна інтеграція.</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ 6. CONTENT TYPES ═══════════════════ -->
+
+<h2 id="s6">
+  <span class="en">6. Content Types & Production Standards</span>
+  <span class="ua">6. Типи контенту та стандарти виробництва</span>
+</h2>
+
+<div class="en">
+<p>Every piece of FEEL Again content must satisfy three conditions before publication: factual accuracy (all numbers traceable to Document 4), narrative coherence (four-step logic preserved), and audience appropriateness (messaging matrix §3 respected). Content that fails any condition is not published, regardless of deadline pressure.</p>
+</div>
+<div class="ua">
+<p>Кожен контент FEEL Again повинен задовольняти три умови перед публікацією: фактична точність (усі числа простежуються до Документа 4), наративна зв'язність (чотирикрокова логіка збережена) та відповідність аудиторії (матриця повідомлень §3 дотримана). Контент, що не відповідає будь-якій умові, не публікується, незалежно від тиску дедлайну.</p>
+</div>
+
+<table>
+<tr>
+  <th><span class="en">Content Type</span><span class="ua">Тип контенту</span></th>
+  <th><span class="en">Audience</span><span class="ua">Аудиторія</span></th>
+  <th><span class="en">Frequency</span><span class="ua">Частота</span></th>
+  <th><span class="en">Production Standard</span><span class="ua">Стандарт виробництва</span></th>
+</tr>
+<tr>
+  <td><span class="en">Dashboard data update</span><span class="ua">Оновлення даних дашборду</span></td>
+  <td><span class="en">All</span><span class="ua">Всі</span></td>
+  <td><span class="en">Continuous</span><span class="ua">Безперервно</span></td>
+  <td><span class="en">Auto-verified against source datasets. Manual review quarterly.</span><span class="ua">Автоверифікація за джерельними датасетами. Ручна перевірка щоквартально.</span></td>
+</tr>
+<tr>
+  <td><span class="en">IATI publication</span><span class="ua">Публікація IATI</span></td>
+  <td><span class="en">A, D</span><span class="ua">A, D</span></td>
+  <td><span class="en">Quarterly</span><span class="ua">Щокварталу</span></td>
+  <td><span class="en">IATI 2.03 schema validation. Machine-readable XML. Published to IATI Registry.</span><span class="ua">Валідація за схемою IATI 2.03. Машинозчитуваний XML. Публікується в IATI Registry.</span></td>
+</tr>
+<tr>
+  <td><span class="en">Donor brief (per-donor)</span><span class="ua">Донорський бриф (на кожного)</span></td>
+  <td><span class="en">A</span><span class="ua">A</span></td>
+  <td><span class="en">Per engagement</span><span class="ua">На кожну взаємодію</span></td>
+  <td><span class="en">Generated via Donor Scoring terminal. Customized alignment scores. Maximum 12 slides. Data-dense.</span><span class="ua">Генерується через термінал Скорингу донорів. Кастомізовані бали вирівнювання. Максимум 12 слайдів. Насичено даними.</span></td>
+</tr>
+<tr>
+  <td><span class="en">Outcome report (case study)</span><span class="ua">Звіт результатів (кейс-стаді)</span></td>
+  <td><span class="en">A, B, C</span><span class="ua">A, B, C</span></td>
+  <td><span class="en">Monthly (from Phase 2)</span><span class="ua">Щомісяця (з Фази 2)</span></td>
+  <td><span class="en">Single provider journey: registration → first session → 8-week outcome. PCL-5/PHQ-9 deltas shown. Anonymized. Dual-language.</span><span class="ua">Шлях одного надавача: реєстрація → перша сесія → 8-тижневий результат. Дельти PCL-5/PHQ-9 показані. Анонімізовано. Двомовний.</span></td>
+</tr>
+<tr>
+  <td><span class="en">TWG presentation</span><span class="ua">Презентація TWG</span></td>
+  <td><span class="en">D, B</span><span class="ua">D, B</span></td>
+  <td><span class="en">Monthly</span><span class="ua">Щомісяця</span></td>
+  <td><span class="en">Dashboard live-demo + 15-minute briefing. Pre-circulated one-pager. Open Q&A.</span><span class="ua">Живе демо дашборду + 15-хвилинний брифінг. Попередньо розповсюджений one-pager. Відкриті запитання.</span></td>
+</tr>
+<tr>
+  <td><span class="en">Provider onboarding kit</span><span class="ua">Набір для онбордингу надавачів</span></td>
+  <td><span class="en">C</span><span class="ua">C</span></td>
+  <td><span class="en">Always available</span><span class="ua">Завжди доступний</span></td>
+  <td><span class="en">Step-by-step guide: registration, certification pathway, session metering demo, payment model explanation. Bilingual. Video + PDF.</span><span class="ua">Покрокова інструкція: реєстрація, шлях сертифікації, демо метрування сесій, пояснення платіжної моделі. Двомовний. Відео + PDF.</span></td>
+</tr>
+</table>
+
+<!-- ═══════════════════ 7. CRISIS COMMUNICATIONS ═══════════════════ -->
+
+<h2 id="s7">
+  <span class="en">7. Crisis & Risk Communications</span>
+  <span class="ua">7. Кризові та ризикові комунікації</span>
+</h2>
+
+<div class="en">
+<p>Operating in Ukraine's MHPSS sector during wartime exposes FEEL Again to communication crises that most technology programmes do not face. The risk categories below have pre-prepared response protocols. The core principle: when in doubt, say less, not more. Accuracy matters more than speed.</p>
+</div>
+<div class="ua">
+<p>Робота в секторі МЗПСП України під час війни наражає FEEL Again на комунікаційні кризи, з якими більшість технологічних програм не стикаються. Категорії ризиків нижче мають заздалегідь підготовлені протоколи реагування. Основний принцип: коли сумніваєтесь, кажіть менше, а не більше. Точність важливіша за швидкість.</p>
+</div>
+
+<table>
+<tr>
+  <th><span class="en">Risk Scenario</span><span class="ua">Ризиковий сценарій</span></th>
+  <th><span class="en">Response Protocol</span><span class="ua">Протокол реагування</span></th>
+  <th><span class="en">Prohibited Responses</span><span class="ua">Заборонені відповіді</span></th>
+</tr>
+<tr>
+  <td><span class="en"><strong>Data breach or platform outage</strong></span><span class="ua"><strong>Витік даних або збій платформи</strong></span></td>
+  <td><span class="en">Immediate notification to affected providers and relevant authorities. Transparent incident report within 24h. No minimization. Root cause analysis published within 7 days.</span><span class="ua">Негайне повідомлення постраждалих надавачів та відповідних органів. Прозорий звіт про інцидент протягом 24 год. Без мінімізації. Аналіз кореневої причини публікується протягом 7 днів.</span></td>
+  <td><span class="en">"No data was at risk." "This was a minor issue." Any statement before facts are confirmed.</span><span class="ua">«Жодні дані не були під загрозою.» «Це була незначна проблема.» Будь-яка заява до підтвердження фактів.</span></td>
+</tr>
+<tr>
+  <td><span class="en"><strong>Misrepresentation in media</strong></span><span class="ua"><strong>Помилкове представлення в медіа</strong></span></td>
+  <td><span class="en">Contact editorial team with specific corrections referenced to Document 4 data. Publish clarification on feelagain.me within 24h. Do not escalate publicly unless factual error causes operational damage.</span><span class="ua">Зв'язатися з редакцією з конкретними корекціями, що посилаються на дані Документа 4. Опублікувати уточнення на feelagain.me протягом 24 год. Не ескалювати публічно, якщо фактична помилка не завдає операційної шкоди.</span></td>
+  <td><span class="en">Aggressive public corrections. Social media arguments. Threatening legal action against journalists.</span><span class="ua">Агресивні публічні корекції. Суперечки у соцмережах. Загрози юридичних дій проти журналістів.</span></td>
+</tr>
+<tr>
+  <td><span class="en"><strong>Political sensitivity (ТИ ЯК? comparison)</strong></span><span class="ua"><strong>Політична чутливість (порівняння з ТИ ЯК?)</strong></span></td>
+  <td><span class="en">Restate complementarity framing immediately. "FEEL Again provides the infrastructure for people who responded to ТИ ЯК?'s powerful message." Escalate internally before any public statement.</span><span class="ua">Негайно повторити рамку компліментарності. «FEEL Again надає інфраструктуру для людей, які відгукнулись на потужне повідомлення ТИ ЯК?» Ескалювати внутрішньо перед будь-якою публічною заявою.</span></td>
+  <td><span class="en">ANY comparative language. ANY implied critique. ANY positioning that suggests competition or superiority.</span><span class="ua">БУДЬ-ЯКА порівняльна мова. БУДЬ-ЯКА імпліцитна критика. БУДЬ-ЯКЕ позиціонування, що передбачає конкуренцію чи перевагу.</span></td>
+</tr>
+<tr>
+  <td><span class="en"><strong>Provider complaint (public)</strong></span><span class="ua"><strong>Скарга надавача (публічна)</strong></span></td>
+  <td><span class="en">Acknowledge promptly. Move to private resolution channel. If complaint has merit, publish resolution and corrective action. If systemic, update provider onboarding materials.</span><span class="ua">Підтвердити оперативно. Перевести у приватний канал вирішення. Якщо скарга має підстави, опублікувати рішення та коригувальні дії. Якщо системне — оновити матеріали онбордингу.</span></td>
+  <td><span class="en">Public argument with provider. Discrediting complainant. Ignoring or deleting complaint.</span><span class="ua">Публічна суперечка з надавачем. Дискредитація скаржника. Ігнорування або видалення скарги.</span></td>
+</tr>
+</table>
+
+<!-- ═══════════════════ 8. VISUAL IDENTITY ═══════════════════ -->
+
+<h2 id="s8">
+  <span class="en">8. Visual Identity Standards</span>
+  <span class="ua">8. Стандарти візуальної ідентичності</span>
+</h2>
+
+<div class="en">
+<p>The FEEL Again visual identity is designed to communicate institutional credibility, not startup energy. Every visual element reinforces the message: this is serious infrastructure for a serious crisis.</p>
+</div>
+<div class="ua">
+<p>Візуальна ідентичність FEEL Again спроєктована для комунікації інституційної довіри, а не стартапівської енергії. Кожен візуальний елемент підсилює повідомлення: це серйозна інфраструктура для серйозної кризи.</p>
+</div>
+
+<div class="key-box">
+  <h4><span class="en">Logo Specification</span><span class="ua">Специфікація логотипу</span></h4>
+  <div class="en">
+  <p style="font-size: 28pt; font-weight: 300; letter-spacing: 2px; margin: 12px 0;"><span style="color: var(--navy);">F</span><span style="color: var(--gold2);">E</span><span style="color: rgba(15,43,70,0.55);">E</span><span style="color: rgba(15,43,70,0.3);">L</span> <span style="color: var(--gold2); margin-left: -4px;">Again</span></p>
+  <p>Wordmark: "FEEL Again" — h1, font-weight: 300 (light). The "F" in full white (on dark) or navy (on light). The first "E" in gold (#D4A017). The second "E" at 55% opacity. The "L" at 30% opacity. "Again" in gold. This gradient symbolizes the fading of emotional capacity and its restoration. The typography is minimal and institutional — no icons, no illustrations, no colour gradients beyond the letter opacity shift.</p>
+  </div>
+  <div class="ua">
+  <p style="font-size: 28pt; font-weight: 300; letter-spacing: 2px; margin: 12px 0;"><span style="color: var(--navy);">F</span><span style="color: var(--gold2);">E</span><span style="color: rgba(15,43,70,0.55);">E</span><span style="color: rgba(15,43,70,0.3);">L</span> <span style="color: var(--gold2); margin-left: -4px;">Again</span></p>
+  <p>Логомарка: «FEEL Again» — h1, font-weight: 300 (light). «F» повний білий (на темному) або navy (на світлому). Перша «E» золота (#D4A017). Друга «E» з непрозорістю 55%. «L» з непрозорістю 30%. «Again» золотом. Цей градієнт символізує зникнення емоційної спроможності та її відновлення. Типографіка мінімальна та інституційна — без іконок, без ілюстрацій, без кольорових градієнтів, окрім зміни непрозорості літер.</p>
+  </div>
+</div>
+
+<table>
+<tr><th><span class="en">Element</span><span class="ua">Елемент</span></th><th><span class="en">Specification</span><span class="ua">Специфікація</span></th></tr>
+<tr><td><strong><span class="en">Primary font</span><span class="ua">Первинний шрифт</span></strong></td><td>Source Sans 3 (documents, web) / Inter (dashboard)</td></tr>
+<tr><td><strong><span class="en">Mono font</span><span class="ua">Моно шрифт</span></strong></td><td>JetBrains Mono (data, formulas, code references)</td></tr>
+<tr><td><strong><span class="en">Colour palette</span><span class="ua">Кольорова палітра</span></strong></td><td><span class="en">Navy #0F2B46 (primary), Gold #D4A017 (accent), Teal #2A9D8F (operations), White #FFFFFF (background)</span><span class="ua">Navy #0F2B46 (первинний), Gold #D4A017 (акцент), Teal #2A9D8F (операції), White #FFFFFF (фон)</span></td></tr>
+<tr><td><strong><span class="en">Dashboard palette</span><span class="ua">Палітра дашборду</span></strong></td><td><span class="en">Dark: #050A15 bg, Cyan #00F5FF, Amber #F59E0B, Purple #A855F7. Light mode: #F8FAFC bg, Teal #0891B2.</span><span class="ua">Темна: #050A15 фон, Cyan #00F5FF, Amber #F59E0B, Purple #A855F7. Світла тема: #F8FAFC фон, Teal #0891B2.</span></td></tr>
+<tr><td><strong><span class="en">Data visualization</span><span class="ua">Візуалізація даних</span></strong></td><td><span class="en">Recharts library. Minimal axes. JetBrains Mono for numbers. No 3D effects. No decorative elements.</span><span class="ua">Бібліотека Recharts. Мінімальні осі. JetBrains Mono для чисел. Без 3D ефектів. Без декоративних елементів.</span></td></tr>
+<tr><td><strong><span class="en">Photography</span><span class="ua">Фотографія</span></strong></td><td><span class="en">No stock photos. No suffering imagery. If photography used: institutional settings, working professionals, data screens. Never patients. Never therapy sessions.</span><span class="ua">Без стокових фото. Без зображень страждань. Якщо фотографія: інституційні середовища, працюючі фахівці, екрани даних. Ніколи пацієнти. Ніколи терапевтичні сесії.</span></td></tr>
+</table>
+
+<!-- ═══════════════════ 9. MEASUREMENT ═══════════════════ -->
+
+<h2 id="s9">
+  <span class="en">9. Communication KPIs</span>
+  <span class="ua">9. КПЕ комунікації</span>
+</h2>
+
+<div class="en">
+<p>Communication effectiveness is measured not by impressions or reach but by outcomes that connect to the operational portfolio (Document 3). A viral post that mispositions FEEL Again is a failure. A single meeting with the right World Bank task team leader that produces a follow-up is a success. The metrics below reflect this philosophy.</p>
+</div>
+<div class="ua">
+<p>Ефективність комунікації вимірюється не за показами чи охопленням, а за результатами, що пов'язані з операційним портфелем (Документ 3). Вірусний пост, що неправильно позиціонує FEEL Again — це провал. Одна зустріч з правильним керівником робочої групи Світового банку, що призводить до продовження — це успіх. Метрики нижче відображають цю філософію.</p>
+</div>
+
+<table>
+<tr>
+  <th><span class="en">KPI</span><span class="ua">КПЕ</span></th>
+  <th><span class="en">M6 Target</span><span class="ua">Ціль M6</span></th>
+  <th><span class="en">M12 Target</span><span class="ua">Ціль M12</span></th>
+  <th><span class="en">M24 Target</span><span class="ua">Ціль M24</span></th>
+</tr>
+<tr>
+  <td><span class="en">Institutional meetings resulting in follow-up action</span><span class="ua">Інституційні зустрічі з продовженням дій</span></td>
+  <td>5</td><td>15</td><td>40</td>
+</tr>
+<tr>
+  <td><span class="en">Donor briefs delivered (tailored per-donor)</span><span class="ua">Донорські брифи доставлено (адаптовані)</span></td>
+  <td>8</td><td>20</td><td>50</td>
+</tr>
+<tr>
+  <td><span class="en">Dashboard unique visitors/month</span><span class="ua">Унікальні відвідувачі дашборду/місяць</span></td>
+  <td>200</td><td>800</td><td>3,000</td>
+</tr>
+<tr>
+  <td><span class="en">IATI publications completed</span><span class="ua">Публікацій IATI завершено</span></td>
+  <td>2</td><td>4</td><td>8</td>
+</tr>
+<tr>
+  <td><span class="en">Provider onboarding kits distributed</span><span class="ua">Наборів для онбордингу роздано</span></td>
+  <td>50</td><td>300</td><td>1,200</td>
+</tr>
+<tr>
+  <td><span class="en">Government MOUs / formal agreements</span><span class="ua">Урядових MOU / формальних угод</span></td>
+  <td>1</td><td>3</td><td>5</td>
+</tr>
+<tr>
+  <td><span class="en">Messaging discipline violations (target: zero)</span><span class="ua">Порушень мовної дисципліни (ціль: нуль)</span></td>
+  <td>0</td><td>0</td><td>0</td>
+</tr>
+</table>
+
+<!-- ═══════════════════ 10. CROSS-REFERENCES ═══════════════════ -->
+
+<h2 id="s10">
+  <span class="en">10. Document Cross-References</span>
+  <span class="ua">10. Перехресні посилання документів</span>
+</h2>
+
+<table>
+<tr>
+  <th><span class="en">This Document Section</span><span class="ua">Розділ цього документа</span></th>
+  <th><span class="en">References</span><span class="ua">Посилання</span></th>
+</tr>
+<tr>
+  <td>§2 <span class="en">Core Narrative</span><span class="ua">Ключовий наратив</span></td>
+  <td><span class="en">Doc 1 (§3 What FEEL Again Is, §4 Architecture); Doc 2 (§1 Perfect Storm); Doc 4 (§1-§5 all data)</span><span class="ua">Док 1 (§3 Що таке FEEL Again, §4 Архітектура); Док 2 (§1 Ідеальний шторм); Док 4 (§1-§5 всі дані)</span></td>
+</tr>
+<tr>
+  <td>§3 <span class="en">Audience Mapping</span><span class="ua">Карта аудиторій</span></td>
+  <td><span class="en">Doc 1 (§11 Strategic Positioning); Doc 2 (§3 Complementarity); Doc 3 (all Clusters)</span><span class="ua">Док 1 (§11 Стратегічне позиціонування); Док 2 (§3 Компліментарність); Док 3 (всі Кластери)</span></td>
+</tr>
+<tr>
+  <td>§4 <span class="en">Language Discipline</span><span class="ua">Мовна дисципліна</span></td>
+  <td><span class="en">Doc 1 (§3 Infrastructure metaphor); Doc 2 (§3 ТИ ЯК? complementarity)</span><span class="ua">Док 1 (§3 Метафора інфраструктури); Док 2 (§3 Компліментарність ТИ ЯК?)</span></td>
+</tr>
+<tr>
+  <td>§5 <span class="en">Channel Strategy</span><span class="ua">Канальна стратегія</span></td>
+  <td><span class="en">Doc 3 (A4 Open Data Layer, phases); Doc 4 (dashboard data source)</span><span class="ua">Док 3 (A4 Шар відкритих даних, фази); Док 4 (джерело даних дашборду)</span></td>
+</tr>
+<tr>
+  <td>§6 <span class="en">Content Standards</span><span class="ua">Стандарти контенту</span></td>
+  <td><span class="en">Doc 4 (single source of truth for all quantitative claims)</span><span class="ua">Док 4 (єдине джерело правди для всіх кількісних тверджень)</span></td>
+</tr>
+<tr>
+  <td>§8 <span class="en">Visual Identity</span><span class="ua">Візуальна ідентичність</span></td>
+  <td><span class="en">Dashboard codebase (index.css, App.tsx); Doc 1-4 (CSS variables, cover design)</span><span class="ua">Кодова база дашборду (index.css, App.tsx); Док 1-4 (CSS змінні, дизайн обкладинки)</span></td>
+</tr>
+<tr>
+  <td>§9 <span class="en">Communication KPIs</span><span class="ua">КПЕ комунікації</span></td>
+  <td><span class="en">Doc 3 (operational KPIs by project); Doc 2 (§5 Strategic KPIs)</span><span class="ua">Док 3 (операційні КПЕ за проєктами); Док 2 (§5 Стратегічні КПЕ)</span></td>
+</tr>
+</table>
+
+<div class="crisis-box" style="margin-top: 40px;">
+  <div class="en"><strong>Document 5 Summary:</strong> This communication strategy is not a marketing plan. It is an operational control document that prevents FEEL Again from undermining its own mission through imprecise language, misaligned messaging, or premature positioning. The core discipline is restraint: say what the data says, position as infrastructure, complement existing actors, and earn credibility through demonstrated capability — never through claims. Every piece of communication must be traceable to the canonical dataset (Document 4) and the operational portfolio (Document 3).</div>
+  <div class="ua"><strong>Резюме Документа 5:</strong> Ця комунікаційна стратегія — не маркетинговий план. Це операційний контрольний документ, що запобігає підриву FEEL Again власної місії через неточну мову, невирівняні повідомлення або передчасне позиціонування. Основна дисципліна — стриманість: кажіть те, що кажуть дані, позиціонуйтесь як інфраструктура, доповнюйте існуючих акторів та здобувайте довіру через продемонстровану спроможність — ніколи через декларації. Кожен елемент комунікації повинен простежуватися до канонічного датасету (Документ 4) та операційного портфелю (Документ 3).</div>
+</div>
+
+</div><!-- /page -->
+
+<script>
+// Default to Ukrainian
+document.body.classList.add('ua-mode');
+document.querySelectorAll('.lang-btn')[0].classList.remove('active');
+document.querySelectorAll('.lang-btn')[1].classList.add('active');
+</script>
+
+</body>
+</html>

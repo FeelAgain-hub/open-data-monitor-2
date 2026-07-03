@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read access to all collections for the dashboard
+    match /{document=**} {
+      allow read: if true;
+    }
+    
+    // For the prototype, we allow writes to these specific collections
+    // In production, this should be restricted to authenticated admins or server-side only
+    match /esoz_declarations/{id} {
+      allow write: if true;
+    }
+    match /nszu_contracts/{id} {
+      allow write: if true;
+    }
+    match /min_soc_vpo/{id} {
+      allow write: if true;
+    }
+    match /acaps_ukraine/{id} {
+      allow write: if true;
+    }
+    match /reach_msna/{id} {
+      allow write: if true;
+    }
+    match /who_survey/{id} {
+      allow write: if true;
+    }
+    match /aggregated_metrics/{id} {
+      allow write: if true;
+    }
+  }
+}

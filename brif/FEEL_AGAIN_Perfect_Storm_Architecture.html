@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEEL Again — Perfect Storm: Narrative Architecture & Infrastructure Diagrams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #0F2B46;
+  --navy2:  #0D1F33;
+  --navy3:  #1A3A5C;
+  --gold:   #B8860B;
+  --gold2:  #D4A017;
+  --gold3:  #F0C040;
+  --teal:   #2A9D8F;
+  --blue:   #2563EB;
+  --red:    #C0392B;
+  --amber:  #D97706;
+  --green:  #16A34A;
+  --white:  #FFFFFF;
+  --light:  #F0F4F8;
+  --light2: #E8EEF5;
+  --text:   #1A1A2E;
+  --dim:    #5A6478;
+  --border: #D1D9E6;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--light);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 11pt;
+}
+.page {
+  max-width: 210mm;
+  margin: 0 auto;
+  background: var(--white);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.12);
+  padding: 40px 48px;
+}
+.cover {
+  background: linear-gradient(135deg, var(--navy) 0%, #1a0a0a 60%, #3d1010 100%);
+  color: var(--white);
+  padding: 60px 48px 50px;
+  text-align: center;
+  margin: -40px -48px 40px;
+  border-bottom: 4px solid var(--red);
+}
+.cover h1 {
+  font-size: 32pt;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+  color: var(--gold2);
+}
+.cover .subtitle {
+  font-size: 14pt;
+  font-weight: 300;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 8px;
+}
+.cover .meta {
+  font-size: 9pt;
+  color: rgba(255,255,255,0.4);
+  margin-top: 24px;
+}
+h2 {
+  font-size: 18pt;
+  color: var(--navy);
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 8px;
+  margin: 50px 0 20px;
+}
+h3 {
+  font-size: 13pt;
+  font-weight: 700;
+  color: var(--navy3);
+  margin: 30px 0 12px;
+}
+p { margin-bottom: 14px; text-align: justify; }
+.ref { font-family: 'JetBrains Mono', monospace; font-size: 8pt; color: var(--dim); }
+.formula-box {
+  background: #1a1a2e;
+  color: #e0e0e0;
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin: 16px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10pt;
+  line-height: 1.9;
+  overflow-x: auto;
+}
+.formula-box .result {
+  color: var(--gold3);
+  font-weight: 700;
+}
+.formula-box .assumption {
+  color: #888;
+  font-style: italic;
+}
+.key-box {
+  background: var(--light);
+  border-left: 4px solid var(--gold);
+  padding: 16px 20px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+}
+.crisis-box {
+  background: var(--navy);
+  color: var(--white);
+  padding: 20px 24px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+.crisis-box strong { color: var(--gold2); }
+.storm-box {
+  background: linear-gradient(135deg, #2d0a0a, #1a0a2d);
+  color: var(--white);
+  padding: 20px 24px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border-left: 4px solid var(--red);
+}
+.storm-box strong { color: var(--gold3); }
+.warning-box {
+  background: #FFF8E1;
+  border-left: 4px solid var(--amber);
+  padding: 14px 18px;
+  margin: 16px 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 10pt;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 9.5pt;
+}
+th {
+  background: var(--navy);
+  color: var(--white);
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+}
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:nth-child(even) { background: var(--light); }
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+.stat-card {
+  text-align: center;
+  padding: 16px;
+  border-radius: 8px;
+}
+.stat-card .num {
+  font-size: 24pt;
+  font-weight: 900;
+}
+.stat-card .lbl {
+  font-size: 8.5pt;
+  margin-top: 4px;
+}
+.stat-red { background: #3d1010; color: white; }
+.stat-red .num { color: #ff6b6b; }
+.stat-red .lbl { color: rgba(255,255,255,0.7); }
+.stat-gold { background: var(--navy); color: white; }
+.stat-gold .num { color: var(--gold2); }
+.stat-gold .lbl { color: rgba(255,255,255,0.7); }
+.stat-teal { background: #0a2d2d; color: white; }
+.stat-teal .num { color: var(--teal); }
+.stat-teal .lbl { color: rgba(255,255,255,0.7); }
+
+/* Narrative flow */
+.flow-step {
+  display: flex;
+  gap: 16px;
+  margin: 16px 0;
+  align-items: flex-start;
+}
+.flow-num {
+  min-width: 40px;
+  height: 40px;
+  background: var(--navy);
+  color: var(--gold2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 14pt;
+  flex-shrink: 0;
+}
+.flow-content {
+  flex: 1;
+}
+.flow-content h4 {
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.flow-content p {
+  margin-bottom: 4px;
+  font-size: 10pt;
+}
+
+/* Diagram containers */
+.diagram-container {
+  background: var(--light);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  overflow-x: auto;
+}
+.diagram-title {
+  text-align: center;
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 16px;
+}
+
+.doc-footer {
+  text-align: center;
+  color: var(--dim);
+  font-size: 8pt;
+  margin-top: 60px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+@media print {
+  body { background: white; }
+  .page { box-shadow: none; max-width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══════ COVER ═══════ -->
+<div class="cover">
+  <div style="font-size:80pt; font-weight:100; color:rgba(255,100,100,0.3); letter-spacing:20px; margin-bottom:-10px;">⚡</div>
+  <h1>The Perfect Storm</h1>
+  <div class="subtitle">Narrative Architecture for FEEL Again's Crisis-to-Infrastructure Argument</div>
+  <div class="subtitle" style="font-size:11pt; color:rgba(255,255,255,0.5);">Calculations, Logic Flow &amp; Infrastructure Diagrams</div>
+  <div class="meta">Working document | March 2026 | All formulas explicit, all assumptions marked</div>
+</div>
+
+<!-- ═══════ NARRATIVE ARCHITECTURE ═══════ -->
+<h2>The Argument in 9 Steps</h2>
+
+<p>The narrative below follows a single logical thread — from observable crisis through structural analysis to the infrastructure imperative. Each step builds on the previous one. Numbers are calculated, not estimated. Assumptions are marked.</p>
+
+<div class="flow-step">
+  <div class="flow-num">1</div>
+  <div class="flow-content">
+    <h4>THE SCALE — Війна і реальне становище</h4>
+    <p>9.6M at risk. 14M needing support. 4,000 professionals. Treatment gap 74–95%. Not a forecast — an ongoing emergency. But the low utilization (1% of need reached per year) is NOT resilience. It is underdiagnosis, compounded by doubled referral volumes that still cannot close the gap.</p>
+  </div>
+</div>
+
+<div class="flow-step">
+  <div class="flow-num">2</div>
+  <div class="flow-content">
+    <h4>THE STIGMA MUTATION — Стигма міняє обличчя</h4>
+    <p>Stigma is no longer "mental health is shameful." It has mutated into two new forms: 45% say "it's expensive" (access barrier disguised as stigma) and ~30% say "now is not the time — there's a war" (temporal deferral). Both are demand time-bombs, not demand absence. The variant forms of this stigma: avoidance rationalized as pragmatism, self-medication rationalized as coping, and trust in "trusted persons" (non-professionals) rationalized as community support.</p>
+  </div>
+</div>
+
+<div class="flow-step">
+  <div class="flow-num">3</div>
+  <div class="flow-content">
+    <h4>THE AFTERSHOCK — Кумулятивний удар</h4>
+    <p>Years of cumulative war stress and trauma will collide with a wave of secondary traumatization. An aftershock. When hostilities slow and people stop surviving and start reflecting, 30–45% of those at risk will seek services simultaneously. The ~4M who needed help but didn't get it — who self-medicated, who traumatized those around them — will meet the "I'll deal with it later" cohort who just ran out of "later."</p>
+  </div>
+</div>
+
+<div class="flow-step">
+  <div class="flow-num">4</div>
+  <div class="flow-content">
+    <h4>THE NUMBERS — Порахуймо</h4>
+    <p>The demand wave is calculable. The service hours are calculable. The market value is calculable. And the capacity deficit — 12 years to clear the backlog with current workforce — is calculable too. This is not rhetoric. This is arithmetic.</p>
+  </div>
+</div>
+
+<div class="flow-step">
+  <div class="flow-num">5</div>
+  <div class="flow-content">
+    <h4>THE GLOBAL CONTEXT — А в світі?</h4>
+    <p>Ukraine is not alone in this crisis — it is at the intersection of global transformation. Remote therapy, digital services, AI replacing the therapist-in-the-room for L1-L2 care. The global digital MH market ($32.95B → $180.56B by 2035) is growing because people will engage with technology when they won't engage with humans. Less shame. Less vulnerability. The private market is 110× larger than humanitarian MHPSS, faster, more aggressive, more precise, and more technological. And its admin overhead is 3.1× lower.</p>
+  </div>
+</div>
+
+<div class="flow-step">
+  <div class="flow-num">6</div>
+  <div class="flow-content">
+    <h4>THE STRUCTURAL FAILURES — Чому нічого не працює</h4>
+    <p>The humanitarian reset and Grand Bargain localization failure. The 20–30% admin overhead that doesn't shrink with scale. The 5–15K shadow practitioners with zero incentive to formalize (€450/month loss). The 1,500–2,500 mhGAP-trained workers under WHO patronage whose 5-session courses cannot address 16-session needs. Even training 300,000 produces only 1.5M sessions against 62.4M needed — a 42× deficit. The beneficiary pathway is a dead end at every turn.</p>
+  </div>
+</div>
+
+<div class="flow-step">
+  <div class="flow-num">7</div>
+  <div class="flow-content">
+    <h4>THE BENEFICIARY DEAD END — Шлях бенефіціара</h4>
+    <p>Primary care doctor → either keeps the patient (earns money, feels like a WHO graduate) → or wipes the nose and misses the need → or refers to secondary ambulatory (exists in NSZU package but has no equipment, no comfort, no marketing budget — "I do it for free on Instagram") → or to psychiatry (last resort, Soviet system). The trained mhGAP worker won't refer to charlatans, so better to miss than to risk complaint. The pattern resolves to: trusted person → unqualified help → growing fraud → growing undiagnosed volume → cycle repeats.</p>
+  </div>
+</div>
+
+<div class="flow-step">
+  <div class="flow-num">8</div>
+  <div class="flow-content">
+    <h4>THE COST OF DOING NOTHING — Ціна бездіяльності</h4>
+    <p>If 3.9M people who need professional help don't receive it, the consequences are not abstract. Self-medication (alcohol, substances), domestic violence, secondary traumatization of families, workforce dropout, economic productivity loss (~5% GDP = ~$8B/year). The cumulative population that deferred care ("not now, there's a war") will collide with the population that never received care — and neither group will have patience or resources for the other.</p>
+  </div>
+</div>
+
+<div class="flow-step">
+  <div class="flow-num">9</div>
+  <div class="flow-content">
+    <h4>THE INFRASTRUCTURE IMPERATIVE — Тому інфраструктура</h4>
+    <p>To process millions of service hours, you need more than therapists — you need infrastructure. To count and report: that alone is tens of millions of data points. To pay and verify: three simultaneous payment flows. To coordinate 450+ organizations: a single digital layer. This is not a platform pitch — this is an arithmetic inevitability. The capacity exists (shadow + humanitarian + institutional = 20,000+ potential providers). The demand exists (3.9–5.7M beneficiaries). What's missing is the connecting tissue — the financial and data rails.</p>
+  </div>
+</div>
+
+<!-- ═══════ CALCULATIONS ═══════ -->
+<h2>The Numbers: Formulas Explicit</h2>
+
+<h3>Beneficiary Volume</h3>
+
+<div class="stats-row">
+  <div class="stat-card stat-red">
+    <div class="num">2.88M</div>
+    <div class="lbl">Scenario: 30% post-war demand</div>
+  </div>
+  <div class="stat-card stat-red">
+    <div class="num">4.32M</div>
+    <div class="lbl">Scenario: 45% access equality</div>
+  </div>
+  <div class="stat-card stat-red">
+    <div class="num">5.76M</div>
+    <div class="lbl">Combined max (overlap-corrected)</div>
+  </div>
+  <div class="stat-card stat-gold">
+    <div class="num">3.9M</div>
+    <div class="lbl">Clinical-level need (L2+L3+L4)</div>
+  </div>
+</div>
+
+<div class="formula-box">
+<span class="assumption">// Stigma shift scenarios</span>
+Scenario_30%  = 9,600,000 × 0.30 = <span class="result">2,880,000 beneficiaries</span>
+Scenario_45%  = 9,600,000 × 0.45 = <span class="result">4,320,000 beneficiaries</span>
+Combined_max  = 9,600,000 × (0.30 + 0.45 − 0.15) = <span class="result">5,760,000 beneficiaries</span>
+<span class="assumption">// 0.15 = estimated overlap between "expensive" and "not the time" cohorts</span>
+
+<span class="assumption">// Clinical-level need (stepped care L2+L3+L4)</span>
+L2 moderate  = 25% of 9.6M  (THE MULTIPLIER — group/structured)
+L3 severe    = 15% of 9.6M  (individual therapy)
+L4 complex   =  5% of 9.6M  (specialist + psychiatry)
+Clinical_total ≈ 40% × 9,600,000 = <span class="result">~3,900,000 persons</span>
+</div>
+
+<h3>Service Hours &amp; Capacity Deficit</h3>
+
+<div class="formula-box">
+<span class="assumption">// Average therapy course for trauma populations</span>
+<span class="assumption">// CBT/EMDR standard: 12-20 sessions; mhGAP stepped care: 8-24</span>
+<span class="assumption">// Conservative cross-tier average: 16 sessions × 1 hour</span>
+
+Total_hours = 3,900,000 × 16 sessions × 1 hr = <span class="result">62,400,000 hours</span>
+
+<span class="assumption">// Current system capacity</span>
+Capacity = 4,000 professionals × 25 patients/week × 50 weeks
+         = <span class="result">5,000,000 sessions/year</span>
+
+Years_to_clear = 62,400,000 ÷ 5,000,000 = <span class="result">12.5 years</span>
+<span class="assumption">// ⚠️ Assumes ZERO new cases during those 12 years (unrealistic)</span>
+<span class="assumption">// ⚠️ Assumes 100% utilization of all professionals (unrealistic)</span>
+<span class="assumption">// Real timeline WITHOUT infrastructure: NEVER</span>
+</div>
+
+<div class="storm-box">
+<p><strong>The counting burden alone:</strong> 62,400,000 hours of service = 62,400,000 session records, outcome measurements (PCL-5/PHQ-9/GAD-7 at each session), financial transactions, and donor reports. Without infrastructure, reporting on this volume is physically impossible — it requires more admin hours than the service hours themselves.</p>
+</div>
+
+<h3>Market Value</h3>
+
+<div class="formula-box">
+<span class="assumption">// Three-Price Architecture applied</span>
+At €40/hr (humanitarian rate):   62,400,000 × €40 = <span class="result">€2.50B</span>
+At €50/hr (operational rate):    62,400,000 × €50 = <span class="result">€3.12B</span>
+At €65/hr (market rate):         62,400,000 × €65 = <span class="result">€4.06B</span>
+
+Range: <span class="result">€2.5B – €4.1B ($2.7B – $4.4B)</span>
+<span class="assumption">// This is UNMET NEED valued at market prices</span>
+<span class="assumption">// Current actual market: ~$0.1-0.3B (mostly shadow sector, uncounted)</span>
+</div>
+
+<h3>Global Market Ranking</h3>
+
+<p>At $3.5B potential MH services market (midpoint estimate), Ukraine ranks approximately 15th globally — after the Netherlands (~$4B), before Sweden (~$3B). This is based on unmet need valued at market prices, not current expenditure. The actual current expenditure is a fraction of this, precisely because the infrastructure to deliver, count, and bill does not exist.</p>
+
+<table>
+<tr><th>#</th><th>Country</th><th>MH Services Market (est.)</th><th>Note</th></tr>
+<tr><td>1</td><td>USA</td><td>~$280B</td><td>40% of global spend</td></tr>
+<tr><td>2</td><td>China</td><td>~$35B</td><td>Fastest absolute growth</td></tr>
+<tr><td>3</td><td>UK</td><td>~$28B</td><td>NHS + private</td></tr>
+<tr><td>4</td><td>Germany</td><td>~$23B</td><td>DiGA regulated market</td></tr>
+<tr><td>5</td><td>Japan</td><td>~$20B</td><td>Corporate wellness driver</td></tr>
+<tr><td>6</td><td>France</td><td>~$17B</td><td></td></tr>
+<tr><td>7</td><td>Canada</td><td>~$13B</td><td></td></tr>
+<tr><td>8</td><td>Australia</td><td>~$11B</td><td></td></tr>
+<tr><td>9</td><td>Brazil</td><td>~$9B</td><td>CAPS expansion</td></tr>
+<tr><td>10</td><td>India</td><td>~$7.5B</td><td>Mobile-first opportunity</td></tr>
+<tr><td>11</td><td>South Korea</td><td>~$6B</td><td></td></tr>
+<tr><td>12</td><td>Italy</td><td>~$5.5B</td><td></td></tr>
+<tr><td>13</td><td>Spain</td><td>~$5B</td><td></td></tr>
+<tr><td>14</td><td>Netherlands</td><td>~$4B</td><td></td></tr>
+<tr style="background:#2d1a0a;color:white;font-weight:700;"><td>15</td><td>🇺🇦 UKRAINE (potential)</td><td>~$3.5B</td><td>Unmet need valued at market prices</td></tr>
+</table>
+
+<div class="warning-box">
+<p><strong>Caveat on ranking:</strong> Country market estimates are approximations from multiple sources (OECD, WHO, market reports) and vary by methodology. Ukraine's figure is potential demand, not current expenditure. The gap between potential ($3.5B) and actual (~$0.2B) is precisely the opportunity — and the infrastructure deficit — that FEEL Again addresses. Country estimates marked as approximate; conservative methodology applied throughout.</p>
+</div>
+
+<h3>The Comparison That Matters</h3>
+
+<div class="stats-row">
+  <div class="stat-card stat-gold">
+    <div class="num">110×</div>
+    <div class="lbl">Private market vs humanitarian MHPSS</div>
+  </div>
+  <div class="stat-card stat-red">
+    <div class="num">3.1×</div>
+    <div class="lbl">Humanitarian admin overhead vs private</div>
+  </div>
+  <div class="stat-card stat-teal">
+    <div class="num">42×</div>
+    <div class="lbl">Deficit even if 300K trained in mhGAP</div>
+  </div>
+  <div class="stat-card stat-gold">
+    <div class="num">12.5</div>
+    <div class="lbl">Years to clear backlog (impossible)</div>
+  </div>
+</div>
+
+<div class="formula-box">
+<span class="assumption">// Humanitarian vs Private market</span>
+Humanitarian MHPSS:      $300M/year    → admin 25% = $75M wasted
+Digital MH (private):    $32,950M/year  → admin  8% = $2,636M but <span class="result">3.1× more efficient per dollar</span>
+Private/Humanitarian =   $32,950M ÷ $300M = <span class="result">110× larger</span>
+
+<span class="assumption">// mhGAP training deficit</span>
+Even if 300,000 workers trained → at 5 sessions each = 1,500,000 sessions
+Need: 62,400,000 hours
+Deficit: 62,400,000 ÷ 1,500,000 = <span class="result">42× gap</span>
+<span class="assumption">// Training is a bridge, not a solution. You cannot train your way out of this.</span>
+
+<span class="assumption">// Shadow sector incentive gap</span>
+Shadow practitioner avg income: ~€1,500/month
+Formalization cost (tax + admin + licensing): ~30%
+Net monthly loss from formalizing: <span class="result">−€450/month</span>
+Incentive to formalize without rails: <span class="result">ZERO</span>
+</div>
+
+<!-- ═══════ DIAGRAMS ═══════ -->
+<h2>Infrastructure Diagrams</h2>
+
+<h3>Diagram 1: Four Core Functions</h3>
+
+<div class="diagram-container">
+<div class="diagram-title">FEEL Again — 4 Core Functions of the Infrastructure</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="100%" style="max-width:800px;display:block;margin:0 auto;">
+  <!-- Background -->
+  <rect x="0" y="0" width="800" height="420" fill="#f8f9fb" rx="12"/>
+
+  <!-- Center hub -->
+  <circle cx="400" cy="210" r="60" fill="#0F2B46" stroke="#D4A017" stroke-width="3"/>
+  <text x="400" y="200" text-anchor="middle" fill="#D4A017" font-family="Source Sans 3" font-size="13" font-weight="700">FEEL Again</text>
+  <text x="400" y="218" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="9">Infrastructure</text>
+  <text x="400" y="232" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="9">Layer</text>
+
+  <!-- Function 1: Registry (top-left) -->
+  <rect x="30" y="30" width="220" height="130" rx="10" fill="#0F2B46"/>
+  <rect x="30" y="30" width="220" height="4" rx="2" fill="#D4A017"/>
+  <text x="140" y="60" text-anchor="middle" fill="#D4A017" font-family="Source Sans 3" font-size="14" font-weight="700">① РЕЄСТР</text>
+  <text x="140" y="80" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">Unified Provider Registry</text>
+  <text x="140" y="98" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Certification pathways</text>
+  <text x="140" y="114" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Shadow → Formal practice</text>
+  <text x="140" y="130" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Making invisible workforce visible</text>
+  <text x="140" y="150" text-anchor="middle" fill="#D4A017" font-family="JetBrains Mono" font-size="8">W3C Verifiable Credentials</text>
+  <!-- Arrow -->
+  <line x1="250" y1="130" x2="345" y2="190" stroke="#D4A017" stroke-width="2" marker-end="url(#arrowGold)"/>
+
+  <!-- Function 2: Metering (top-right) -->
+  <rect x="550" y="30" width="220" height="130" rx="10" fill="#0F2B46"/>
+  <rect x="550" y="30" width="220" height="4" rx="2" fill="#2A9D8F"/>
+  <text x="660" y="60" text-anchor="middle" fill="#2A9D8F" font-family="Source Sans 3" font-size="14" font-weight="700">② МЕТРУВАННЯ</text>
+  <text x="660" y="80" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">Session Metering + Outcomes</text>
+  <text x="660" y="98" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">PCL-5, PHQ-9, GAD-7</text>
+  <text x="660" y="114" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">62.4M hours → 62.4M records</text>
+  <text x="660" y="130" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">National outcome dataset</text>
+  <text x="660" y="150" text-anchor="middle" fill="#2A9D8F" font-family="JetBrains Mono" font-size="8">HL7 FHIR R4 bundles</text>
+  <line x1="550" y1="130" x2="455" y2="190" stroke="#2A9D8F" stroke-width="2" marker-end="url(#arrowTeal)"/>
+
+  <!-- Function 3: Payment (bottom-left) -->
+  <rect x="30" y="260" width="220" height="130" rx="10" fill="#0F2B46"/>
+  <rect x="30" y="386" width="220" height="4" rx="2" fill="#C0392B"/>
+  <text x="140" y="290" text-anchor="middle" fill="#ff6b6b" font-family="Source Sans 3" font-size="14" font-weight="700">③ ОПЛАТА</text>
+  <text x="140" y="310" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">Outcome-Based Payment</text>
+  <text x="140" y="328" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">3 payment flows simultaneously</text>
+  <text x="140" y="344" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Clinical 2-3% | Humanitarian 0-0.5%</text>
+  <text x="140" y="360" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Resources follow the person</text>
+  <text x="140" y="380" text-anchor="middle" fill="#ff6b6b" font-family="JetBrains Mono" font-size="8">ISO 20022 + Stellar/Solana</text>
+  <line x1="250" y1="290" x2="345" y2="230" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrowRed)"/>
+
+  <!-- Function 4: Interop (bottom-right) -->
+  <rect x="550" y="260" width="220" height="130" rx="10" fill="#0F2B46"/>
+  <rect x="550" y="386" width="220" height="4" rx="2" fill="#2563EB"/>
+  <text x="660" y="290" text-anchor="middle" fill="#6ba3ff" font-family="Source Sans 3" font-size="14" font-weight="700">④ ІНТЕРОП</text>
+  <text x="660" y="310" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">Interoperability Layer</text>
+  <text x="660" y="328" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Open API → ESOZ (36.5M users)</text>
+  <text x="660" y="344" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Helsi (49,000+ facilities)</text>
+  <text x="660" y="360" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">MOH + MinEcon + Donor reporting</text>
+  <text x="660" y="380" text-anchor="middle" fill="#6ba3ff" font-family="JetBrains Mono" font-size="8">FHIR R4 + IATI 2.03 + DHIS2</text>
+  <line x1="550" y1="290" x2="455" y2="230" stroke="#6ba3ff" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowGold" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#D4A017"/></marker>
+    <marker id="arrowTeal" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2A9D8F"/></marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#ff6b6b"/></marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#6ba3ff"/></marker>
+  </defs>
+</svg>
+</div>
+
+<h3>Diagram 2: Five Platform Layers (Technical Architecture)</h3>
+
+<div class="diagram-container">
+<div class="diagram-title">FEEL Again — 5 Platform Layers (Technology Stack)</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width:800px;display:block;margin:0 auto;">
+  <rect x="0" y="0" width="800" height="380" fill="#f8f9fb" rx="12"/>
+
+  <!-- Layer 5 (top) — Presentation -->
+  <rect x="40" y="20" width="720" height="56" rx="8" fill="#2563EB"/>
+  <text x="400" y="42" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="14" font-weight="700">LAYER 5: PRESENTATION &amp; ACCESS</text>
+  <text x="400" y="60" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Source Sans 3" font-size="10">Web portal | Mobile app | Provider dashboard | Beneficiary self-service | Chatbot triage</text>
+
+  <!-- Layer 4 — Integration -->
+  <rect x="40" y="86" width="720" height="56" rx="8" fill="#1A3A5C"/>
+  <text x="400" y="108" text-anchor="middle" fill="#D4A017" font-family="Source Sans 3" font-size="14" font-weight="700">LAYER 4: INTEGRATION GATEWAY + SERVICE BUS</text>
+  <text x="400" y="126" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Source Sans 3" font-size="10">Open API (FHIR R4) | ESOZ connector | Helsi API v3 | Diia.Engine | DHIS2 | Humanitarian 4W/FTS</text>
+
+  <!-- Layer 3 — Application -->
+  <rect x="40" y="152" width="350" height="76" rx="8" fill="#0F2B46"/>
+  <text x="215" y="174" text-anchor="middle" fill="#2A9D8F" font-family="Source Sans 3" font-size="13" font-weight="700">LAYER 3a: CLINICAL ENGINE</text>
+  <text x="215" y="192" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">mhGAP protocols | Stepped care L1-L4</text>
+  <text x="215" y="206" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Outcome measurement | BRAVEMIND VR | Matching</text>
+  <text x="215" y="220" text-anchor="middle" fill="#2A9D8F" font-family="JetBrains Mono" font-size="8">SNOMED CT | ICD-10/11 | LOINC</text>
+
+  <rect x="410" y="152" width="350" height="76" rx="8" fill="#0F2B46"/>
+  <text x="585" y="174" text-anchor="middle" fill="#D4A017" font-family="Source Sans 3" font-size="13" font-weight="700">LAYER 3b: FINANCIAL ENGINE</text>
+  <text x="585" y="192" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">SDK.finance core | Multi-currency accounts</text>
+  <text x="585" y="206" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Escrow | Smart clearing | Commission engine</text>
+  <text x="585" y="220" text-anchor="middle" fill="#D4A017" font-family="JetBrains Mono" font-size="8">ISO 20022 | BVNK bridge | 3 payment flows</text>
+
+  <!-- Layer 2 — Data -->
+  <rect x="40" y="238" width="720" height="56" rx="8" fill="#0D1F33"/>
+  <text x="400" y="260" text-anchor="middle" fill="#F0C040" font-family="Source Sans 3" font-size="14" font-weight="700">LAYER 2: DATA &amp; ACCOUNTABILITY</text>
+  <text x="400" y="278" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Source Sans 3" font-size="10">3-tier data architecture (public | donor | private) | Blockchain verification | GDPR/HIPAA | Encryption</text>
+
+  <!-- Layer 1 — Infrastructure -->
+  <rect x="40" y="304" width="720" height="56" rx="8" fill="#1a0a0a" stroke="#D4A017" stroke-width="1"/>
+  <text x="400" y="326" text-anchor="middle" fill="#D4A017" font-family="Source Sans 3" font-size="14" font-weight="700">LAYER 1: BLOCKCHAIN SETTLEMENT</text>
+  <text x="400" y="344" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Source Sans 3" font-size="10">Stellar (demo) → London Exchange Core DvP (HighCastle) → Solana (production) | $0.0001/tx | &lt;6 sec finality</text>
+</svg>
+</div>
+
+<h3>Diagram 3: Six Programme Layers (Strategic Domains)</h3>
+
+<div class="diagram-container">
+<div class="diagram-title">FEEL Again — 6 Programme Layers (Strategic Architecture)</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" style="max-width:800px;display:block;margin:0 auto;">
+  <rect x="0" y="0" width="800" height="500" fill="#f8f9fb" rx="12"/>
+
+  <!-- Central label -->
+  <text x="400" y="30" text-anchor="middle" fill="#0F2B46" font-family="Source Sans 3" font-size="12" font-weight="700">Programme layers ≠ Platform layers. Strategic domains map to technology through the Gateway.</text>
+
+  <!-- Layer 1: FinTech -->
+  <rect x="30" y="50" width="240" height="120" rx="10" fill="#0F2B46"/>
+  <rect x="30" y="50" width="6" height="120" rx="3" fill="#D4A017"/>
+  <text x="155" y="76" text-anchor="middle" fill="#D4A017" font-family="Source Sans 3" font-size="15" font-weight="900">1. FINTECH</text>
+  <text x="155" y="96" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">Blockchain payments</text>
+  <text x="155" y="112" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Escrow + Smart Clearing</text>
+  <text x="155" y="128" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Donor scoring + Commission</text>
+  <text x="155" y="148" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Source Sans 3" font-size="9">→ Platform: L1 + L3b</text>
+  <text x="155" y="162" text-anchor="middle" fill="#D4A017" font-family="JetBrains Mono" font-size="8">€2.5-4.1B market value</text>
+
+  <!-- Layer 2: Digitalization -->
+  <rect x="280" y="50" width="240" height="120" rx="10" fill="#0F2B46"/>
+  <rect x="280" y="50" width="6" height="120" rx="3" fill="#2A9D8F"/>
+  <text x="405" y="76" text-anchor="middle" fill="#2A9D8F" font-family="Source Sans 3" font-size="15" font-weight="900">2. DIGITALIZATION</text>
+  <text x="405" y="96" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">Provider registry</text>
+  <text x="405" y="112" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Session metering + Matching</text>
+  <text x="405" y="128" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Chatbot triage + Mobile</text>
+  <text x="405" y="148" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Source Sans 3" font-size="9">→ Platform: L3a + L4 + L5</text>
+  <text x="405" y="162" text-anchor="middle" fill="#2A9D8F" font-family="JetBrains Mono" font-size="8">62.4M records to process</text>
+
+  <!-- Layer 3: Clinical -->
+  <rect x="530" y="50" width="240" height="120" rx="10" fill="#0F2B46"/>
+  <rect x="530" y="50" width="6" height="120" rx="3" fill="#ff6b6b"/>
+  <text x="655" y="76" text-anchor="middle" fill="#ff6b6b" font-family="Source Sans 3" font-size="15" font-weight="900">3. CLINICAL</text>
+  <text x="655" y="96" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">Stepped care L1-L4</text>
+  <text x="655" y="112" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">VR therapy (BRAVEMIND)</text>
+  <text x="655" y="128" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">mhGAP + EMDR + Supervision</text>
+  <text x="655" y="148" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Source Sans 3" font-size="9">→ Platform: L3a</text>
+  <text x="655" y="162" text-anchor="middle" fill="#ff6b6b" font-family="JetBrains Mono" font-size="8">3.9M clinical-level need</text>
+
+  <!-- Layer 4: Sustainable Dev -->
+  <rect x="30" y="200" width="240" height="120" rx="10" fill="#0F2B46"/>
+  <rect x="30" y="200" width="6" height="120" rx="3" fill="#16A34A"/>
+  <text x="155" y="226" text-anchor="middle" fill="#16A34A" font-family="Source Sans 3" font-size="13" font-weight="900">4. SUSTAINABLE DEV</text>
+  <text x="155" y="246" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">Provider formalization</text>
+  <text x="155" y="262" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">CSR (Train for Care)</text>
+  <text x="155" y="278" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">State SaaS subscription</text>
+  <text x="155" y="298" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Source Sans 3" font-size="9">→ Reverse Waterfall model</text>
+  <text x="155" y="312" text-anchor="middle" fill="#16A34A" font-family="JetBrains Mono" font-size="8">5-15K shadow → formal</text>
+
+  <!-- Layer 5: Data & Coordination -->
+  <rect x="280" y="200" width="240" height="120" rx="10" fill="#0F2B46"/>
+  <rect x="280" y="200" width="6" height="120" rx="3" fill="#6ba3ff"/>
+  <text x="405" y="226" text-anchor="middle" fill="#6ba3ff" font-family="Source Sans 3" font-size="13" font-weight="900">5. DATA &amp; COORD</text>
+  <text x="405" y="246" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">Open datasets + mhGAP reporting</text>
+  <text x="405" y="262" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">DHIS2 sync + IATI 2.03</text>
+  <text x="405" y="278" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Donor coordination layer</text>
+  <text x="405" y="298" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Source Sans 3" font-size="9">→ Platform: L2 + L4</text>
+  <text x="405" y="312" text-anchor="middle" fill="#6ba3ff" font-family="JetBrains Mono" font-size="8">~0% sync → 100% interop</text>
+
+  <!-- Layer 6: Advocacy & Comms -->
+  <rect x="530" y="200" width="240" height="120" rx="10" fill="#0F2B46"/>
+  <rect x="530" y="200" width="6" height="120" rx="3" fill="#D97706"/>
+  <text x="655" y="226" text-anchor="middle" fill="#D97706" font-family="Source Sans 3" font-size="13" font-weight="900">6. ADVOCACY</text>
+  <text x="655" y="246" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">Narratives + Stakeholder comms</text>
+  <text x="655" y="262" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Complementarity framing</text>
+  <text x="655" y="278" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Policy influence + Grand Bargain</text>
+  <text x="655" y="298" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Source Sans 3" font-size="9">→ Document 5</text>
+  <text x="655" y="312" text-anchor="middle" fill="#D97706" font-family="JetBrains Mono" font-size="8">Rails not train. Amplify not replace.</text>
+
+  <!-- Gateway arrow -->
+  <rect x="100" y="345" width="600" height="50" rx="10" fill="none" stroke="#D4A017" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="400" y="370" text-anchor="middle" fill="#D4A017" font-family="Source Sans 3" font-size="13" font-weight="700">GATEWAY + SERVICE BUS</text>
+  <text x="400" y="386" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="9">Programme layers connect to platform layers through integration gateway. Not 1:1 mapping — many-to-many.</text>
+
+  <!-- Bottom labels -->
+  <text x="400" y="430" text-anchor="middle" fill="#0F2B46" font-family="Source Sans 3" font-size="11" font-weight="700">↓ Maps to 5 Platform Layers (see Diagram 2) ↓</text>
+
+  <!-- Beneficiary flow arrow -->
+  <rect x="100" y="450" width="600" height="36" rx="8" fill="#1a0a0a"/>
+  <text x="400" y="472" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10">BENEFICIARY FLOW: Need → Triage → Match → Session → Outcome → Payment → Report → Follow-up</text>
+</svg>
+</div>
+
+<h3>Diagram 4: The Beneficiary Dead End (Why Infrastructure)</h3>
+
+<div class="diagram-container">
+<div class="diagram-title">The Beneficiary Pathway — Without vs With FEEL Again</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" width="100%" style="max-width:800px;display:block;margin:0 auto;">
+  <rect x="0" y="0" width="800" height="460" fill="#f8f9fb" rx="12"/>
+
+  <!-- WITHOUT label -->
+  <text x="400" y="28" text-anchor="middle" fill="#C0392B" font-family="Source Sans 3" font-size="14" font-weight="900">WITHOUT INFRASTRUCTURE (current state)</text>
+
+  <!-- Beneficiary -->
+  <rect x="20" y="45" width="100" height="40" rx="8" fill="#C0392B"/>
+  <text x="70" y="70" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10" font-weight="700">Beneficiary</text>
+
+  <!-- Primary care -->
+  <rect x="150" y="45" width="120" height="40" rx="8" fill="#D97706"/>
+  <text x="210" y="63" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="9" font-weight="600">Primary care</text>
+  <text x="210" y="76" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="8">mhGAP graduate</text>
+  <line x1="120" y1="65" x2="150" y2="65" stroke="#666" stroke-width="1.5"/>
+
+  <!-- Branches from primary -->
+  <!-- Branch 1: keeps patient -->
+  <rect x="310" y="20" width="130" height="30" rx="6" fill="rgba(217,119,6,0.3)" stroke="#D97706"/>
+  <text x="375" y="40" text-anchor="middle" fill="#D97706" font-family="Source Sans 3" font-size="8">Keeps patient (earns $)</text>
+  <line x1="270" y1="55" x2="310" y2="35" stroke="#D97706" stroke-width="1"/>
+
+  <!-- Branch 2: misses need -->
+  <rect x="310" y="55" width="130" height="30" rx="6" fill="rgba(192,57,43,0.2)" stroke="#C0392B"/>
+  <text x="375" y="75" text-anchor="middle" fill="#C0392B" font-family="Source Sans 3" font-size="8">Misses the need entirely</text>
+  <line x1="270" y1="65" x2="310" y2="70" stroke="#C0392B" stroke-width="1"/>
+
+  <!-- Branch 3: refers secondary -->
+  <rect x="310" y="90" width="130" height="30" rx="6" fill="rgba(37,99,235,0.2)" stroke="#2563EB"/>
+  <text x="375" y="110" text-anchor="middle" fill="#2563EB" font-family="Source Sans 3" font-size="8">→ Secondary ambulatory</text>
+  <line x1="270" y1="75" x2="310" y2="105" stroke="#2563EB" stroke-width="1"/>
+
+  <!-- Secondary problems -->
+  <rect x="470" y="90" width="150" height="30" rx="6" fill="rgba(37,99,235,0.1)" stroke="#2563EB" stroke-dasharray="4,2"/>
+  <text x="545" y="105" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="7.5">No equipment, no comfort</text>
+  <text x="545" y="115" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="7.5">"I do it free on Instagram"</text>
+  <line x1="440" y1="105" x2="470" y2="105" stroke="#2563EB" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <!-- Branch 4: psychiatry -->
+  <rect x="470" y="130" width="150" height="30" rx="6" fill="rgba(192,57,43,0.3)" stroke="#C0392B"/>
+  <text x="545" y="145" text-anchor="middle" fill="#C0392B" font-family="Source Sans 3" font-size="8">→ Psychiatry (last resort)</text>
+  <text x="545" y="155" text-anchor="middle" fill="#888" font-family="Source Sans 3" font-size="7">Soviet system, self-reported</text>
+
+  <!-- Trusted person pattern -->
+  <rect x="650" y="45" width="130" height="50" rx="6" fill="#1a0a0a"/>
+  <text x="715" y="63" text-anchor="middle" fill="#ff6b6b" font-family="Source Sans 3" font-size="9" font-weight="700">PATTERN:</text>
+  <text x="715" y="78" text-anchor="middle" fill="#ff6b6b" font-family="Source Sans 3" font-size="8">→ Trusted person</text>
+  <text x="715" y="90" text-anchor="middle" fill="#ff6b6b" font-family="Source Sans 3" font-size="8">→ Fraud grows</text>
+
+  <!-- Dead end results -->
+  <rect x="20" y="130" width="760" height="40" rx="8" fill="#3d1010"/>
+  <text x="400" y="148" text-anchor="middle" fill="#ff6b6b" font-family="Source Sans 3" font-size="10" font-weight="700">RESULT: Self-medication → DV → Secondary trauma → Workforce dropout → ~$8B/year GDP loss → Cycle repeats</text>
+  <text x="400" y="163" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Source Sans 3" font-size="8">No data. No accountability. No counting. No reporting. No sustainability.</text>
+
+  <!-- Divider -->
+  <line x1="20" y1="190" x2="780" y2="190" stroke="#D4A017" stroke-width="3"/>
+  <text x="400" y="210" text-anchor="middle" fill="#16A34A" font-family="Source Sans 3" font-size="14" font-weight="900">WITH FEEL AGAIN INFRASTRUCTURE</text>
+
+  <!-- With FEEL pathway -->
+  <rect x="20" y="225" width="100" height="40" rx="8" fill="#16A34A"/>
+  <text x="70" y="250" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="10" font-weight="700">Beneficiary</text>
+
+  <rect x="145" y="225" width="100" height="40" rx="8" fill="#2A9D8F"/>
+  <text x="195" y="243" text-anchor="middle" fill="white" font-family="Source Sans 3" font-size="9" font-weight="600">Chatbot</text>
+  <text x="195" y="256" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Source Sans 3" font-size="8">triage L1-L4</text>
+  <line x1="120" y1="245" x2="145" y2="245" stroke="#16A34A" stroke-width="2"/>
+
+  <rect x="265" y="225" width="100" height="40" rx="8" fill="#0F2B46"/>
+  <text x="315" y="243" text-anchor="middle" fill="#D4A017" font-family="Source Sans 3" font-size="9" font-weight="600">Registry</text>
+  <text x="315" y="256" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Source Sans 3" font-size="8">match → provider</text>
+  <line x1="245" y1="245" x2="265" y2="245" stroke="#2A9D8F" stroke-width="2"/>
+
+  <rect x="385" y="225" width="100" height="40" rx="8" fill="#0F2B46"/>
+  <text x="435" y="243" text-anchor="middle" fill="#2A9D8F" font-family="Source Sans 3" font-size="9" font-weight="600">Session</text>
+  <text x="435" y="256" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Source Sans 3" font-size="8">metered + scored</text>
+  <line x1="365" y1="245" x2="385" y2="245" stroke="#D4A017" stroke-width="2"/>
+
+  <rect x="505" y="225" width="100" height="40" rx="8" fill="#0F2B46"/>
+  <text x="555" y="243" text-anchor="middle" fill="#ff6b6b" font-family="Source Sans 3" font-size="9" font-weight="600">Payment</text>
+  <text x="555" y="256" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Source Sans 3" font-size="8">outcome-linked</text>
+  <line x1="485" y1="245" x2="505" y2="245" stroke="#2A9D8F" stroke-width="2"/>
+
+  <rect x="625" y="225" width="155" height="40" rx="8" fill="#0F2B46"/>
+  <text x="702" y="243" text-anchor="middle" fill="#6ba3ff" font-family="Source Sans 3" font-size="9" font-weight="600">Report</text>
+  <text x="702" y="256" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Source Sans 3" font-size="8">MOH + Donor + MinEcon</text>
+  <line x1="605" y1="245" x2="625" y2="245" stroke="#ff6b6b" stroke-width="2"/>
+
+  <!-- Result with FEEL -->
+  <rect x="20" y="280" width="760" height="50" rx="8" fill="#0a2d1a"/>
+  <text x="400" y="298" text-anchor="middle" fill="#16A34A" font-family="Source Sans 3" font-size="10" font-weight="700">RESULT: Every session counted. Every outcome measured. Every dollar tracked. Every provider visible.</text>
+  <text x="400" y="316" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="Source Sans 3" font-size="9">Shadow → Formal. Humanitarian → State. Fragmented → Coordinated. 1% → 3-5× capacity multiplier.</text>
+
+  <!-- Bottom comparison -->
+  <rect x="20" y="350" width="370" height="100" rx="8" fill="white" stroke="#C0392B" stroke-width="2"/>
+  <text x="205" y="372" text-anchor="middle" fill="#C0392B" font-family="Source Sans 3" font-size="11" font-weight="700">WITHOUT</text>
+  <text x="205" y="392" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="9">100,000 people/year reached (1%)</text>
+  <text x="205" y="408" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="9">12.5 years to clear backlog</text>
+  <text x="205" y="424" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="9">0% synchronization with ESOZ</text>
+  <text x="205" y="440" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="9">20-30% admin overhead</text>
+
+  <rect x="410" y="350" width="370" height="100" rx="8" fill="white" stroke="#16A34A" stroke-width="2"/>
+  <text x="595" y="372" text-anchor="middle" fill="#16A34A" font-family="Source Sans 3" font-size="11" font-weight="700">WITH FEEL AGAIN</text>
+  <text x="595" y="392" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="9">300,000-500,000 people/year (3-5×)</text>
+  <text x="595" y="408" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="9">Stepped care: L1-L2 at 1:200+ ratio</text>
+  <text x="595" y="424" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="9">Full FHIR R4 interoperability with ESOZ</text>
+  <text x="595" y="440" text-anchor="middle" fill="#5A6478" font-family="Source Sans 3" font-size="9">~10% admin (blockchain-verified)</text>
+</svg>
+</div>
+
+<!-- ═══════ AFTERSHOCK MODEL ═══════ -->
+<h2>The Aftershock Model</h2>
+
+<div class="storm-box">
+<p><strong>The mental health perfect storm has three converging wavefronts:</strong></p>
+<p>(1) <strong>Cumulative trauma load</strong> — years of war stress with no processing, no diagnosis, no intervention. This load does not dissipate. It compounds.</p>
+<p>(2) <strong>Deferred demand</strong> — the 30% who said "not now, there's a war" and the 45% who said "it's too expensive." When the first barrier drops (peace or affordability), this demand materialises within months, not years.</p>
+<p>(3) <strong>Secondary traumatisation cascade</strong> — the 3.9M who needed help but self-medicated, acted out, or withdrew have been traumatising their families, colleagues, and communities for years. When the primary cohort finally seeks help, the secondary cohort has already multiplied the caseload.</p>
+<p>These three waves will hit simultaneously. The system that receives them has 4,000 professionals, 1% annual reach, and zero digital infrastructure. This is not a risk scenario. This is a scheduled event.</p>
+</div>
+
+<div class="formula-box">
+<span class="assumption">// Aftershock demand model</span>
+Wave_1 (deferred):  9,600,000 × 30% "not now" =  <span class="result">2,880,000</span>
+Wave_2 (access):    9,600,000 × 45% "expensive" = <span class="result">4,320,000</span>
+Overlap correction:                               <span class="result">−1,440,000</span>
+Wave_3 (secondary): conservative 10% secondary =  <span class="result">+960,000</span>
+
+Total aftershock demand: <span class="result">~6,720,000 people</span>
+<span class="assumption">// Within 12-24 months of trigger event (peace/accessibility)</span>
+
+Service hours needed:  6,720,000 × 16 sessions = <span class="result">107,520,000 hours</span>
+Market value:          107,520,000 × €50/hr =     <span class="result">€5.4B</span>
+Current capacity:      5,000,000 sessions/year
+Time to serve:         107,520,000 ÷ 5,000,000 = <span class="result">21.5 years</span>
+
+<span class="assumption">// WITHOUT infrastructure: mathematically unsolvable</span>
+<span class="assumption">// WITH infrastructure (3-5× multiplier): 4-7 years — difficult but possible</span>
+</div>
+
+<!-- ═══════ FOOTER ═══════ -->
+<div class="doc-footer">
+  FEEL Again — Perfect Storm: Narrative Architecture &amp; Infrastructure Diagrams | Working Document | March 2026
+  <br><span class="ref">All calculations: formulas explicit, assumptions marked. Sources: WHO 2025, UNICEF, OECD, Valyu Research, Market Research Future, Document 4 (Open Data). Country market estimates approximate — conservative methodology. This is a planning document, not a commitment.</span>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>

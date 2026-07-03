@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slow Nomad — Investor & Partner Package</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --dark: #141413;
+    --surface: #1E201A;
+    --border: #2E3028;
+    --text: #FAF9F5;
+    --muted: #B0AEA5;
+    --light-gray: #E8E6DC;
+    --amber: #C8951A;
+    --amber-light: rgba(200,149,26,0.10);
+    --green: #5A7A40;
+    --green-light: rgba(90,122,64,0.10);
+    --font: 'Helvetica Neue', system-ui, -apple-system, Arial, sans-serif;
+  }
+  body { font-family: var(--font); background: var(--dark); color: var(--text); min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(20,20,19,0.97); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px; display: flex; align-items: center; gap: 0; height: 48px;
+  }
+  .nav-logo { font-size: 16px; font-weight: 900; color: var(--text); margin-right: 24px; letter-spacing: -0.02em; flex-shrink: 0; }
+  .nav-logo span { font-weight: 200; color: var(--muted); }
+  .nav-links { display: flex; gap: 0; overflow-x: auto; flex: 1; }
+  .nav-link {
+    padding: 0 14px; height: 48px; display: flex; align-items: center;
+    font-size: 11px; font-weight: 500; color: var(--muted); cursor: pointer;
+    border-bottom: 2px solid transparent; white-space: nowrap; border-top: none;
+    background: none; border-left: none; border-right: none;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--amber); border-bottom-color: var(--amber); font-weight: 700; }
+  .nav-cta {
+    margin-left: auto; padding: 7px 16px; background: var(--amber); border: none;
+    border-radius: 7px; color: var(--dark); font-size: 11px; font-weight: 800;
+    cursor: pointer; flex-shrink: 0; letter-spacing: 0.04em;
+  }
+
+  /* SECTIONS */
+  .page { display: none; padding-top: 48px; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* COVER */
+  .cover {
+    min-height: calc(100vh - 48px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 60px 24px; text-align: center;
+  }
+  .cover-badge {
+    display: inline-block; padding: 5px 14px; background: var(--amber-light);
+    border: 1px solid rgba(200,149,26,0.3); border-radius: 20px;
+    font-size: 10px; font-weight: 700; color: var(--amber); letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 28px;
+  }
+  .cover h1 { font-size: clamp(36px, 6vw, 72px); font-weight: 900; color: var(--text); letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 8px; }
+  .cover h1 span { color: var(--amber); font-weight: 200; }
+  .cover-sub { font-size: clamp(13px, 2vw, 17px); color: var(--muted); margin-bottom: 40px; font-weight: 400; line-height: 1.6; max-width: 560px; }
+  .cover-stats { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-bottom: 48px; }
+  .stat-box {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 24px; text-align: center; min-width: 120px;
+  }
+  .stat-v { font-size: 26px; font-weight: 800; color: var(--amber); }
+  .stat-l { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 3px; }
+  .cover-nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; width: 100%; max-width: 860px; }
+  .cover-nav-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 18px; cursor: pointer; text-align: left;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .cover-nav-item:hover { border-color: var(--amber); background: var(--amber-light); }
+  .cover-nav-item .icon { font-size: 22px; margin-bottom: 8px; }
+  .cover-nav-item .title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .cover-nav-item .desc { font-size: 10px; color: var(--muted); line-height: 1.5; }
+
+  /* RESEARCH */
+  .content { max-width: 840px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section-title { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 6px; }
+  .section-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
+
+  .benchmark-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 24px; margin-bottom: 16px;
+  }
+  .benchmark-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .benchmark-name { font-size: 17px; font-weight: 800; color: var(--text); }
+  .benchmark-tag { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 8px; }
+  .tag-green { background: var(--green-light); color: var(--green); }
+  .tag-amber { background: var(--amber-light); color: var(--amber); }
+  .tag-red { background: rgba(138,58,42,0.12); color: #C07050; }
+  .benchmark-body { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+  .benchmark-gap { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+  .gap-label { font-size: 9px; color: var(--amber); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; }
+  .gap-text { font-size: 11px; color: var(--text); line-height: 1.5; }
+
+  .insight-box {
+    background: var(--amber-light); border: 1px solid rgba(200,149,26,0.25);
+    border-radius: 12px; padding: 20px 22px; margin: 24px 0;
+  }
+  .insight-label { font-size: 9px; font-weight: 700; color: var(--amber); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+  .insight-text { font-size: 13px; color: var(--text); line-height: 1.65; }
+
+  /* NOMADLIST SECTION */
+  .partner-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 16px;
+  }
+  .partner-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .partner-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+  .partner-name { font-size: 18px; font-weight: 800; color: var(--text); }
+  .partner-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .partner-body { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .api-flow { display: flex; gap: 0; margin: 16px 0; overflow-x: auto; }
+  .api-step {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; min-width: 150px; flex-shrink: 0;
+  }
+  .api-step-n { font-size: 10px; font-weight: 700; color: var(--amber); margin-bottom: 4px; }
+  .api-step-t { font-size: 11px; color: var(--text); font-weight: 600; margin-bottom: 2px; }
+  .api-step-d { font-size: 10px; color: var(--muted); line-height: 1.4; }
+  .api-arrow { padding: 10px 6px; color: var(--border); font-size: 18px; display: flex; align-items: center; flex-shrink: 0; }
+
+  /* LAYERS */
+  .layers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin: 20px 0; }
+  .layer-mini {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px;
+    transition: border-color 0.15s;
+  }
+  .layer-mini:hover { border-color: var(--amber); }
+  .layer-mini-icon { font-size: 20px; margin-bottom: 6px; }
+  .layer-mini-name { font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .layer-mini-src { font-size: 9px; color: var(--muted); }
+  .layer-mini-type { display: inline-block; margin-top: 5px; font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+  .type-risk { background: rgba(138,58,42,0.15); color: #C07050; }
+  .type-quality { background: var(--green-light); color: var(--green); }
+  .type-interest { background: rgba(42,90,138,0.15); color: #5A8ABA; }
+
+  /* IFRAME section */
+  .demo-frame { width: 100%; height: 620px; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); position: relative; }
+  .demo-label { font-size: 10px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .demo-note { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+
+  /* QUEST */
+  .phase-block { margin-bottom: 28px; }
+  .phase-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .phase-num { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+  .phase-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .phase-count { font-size: 10px; color: var(--muted); }
+  .quest-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .quest-n { font-size: 10px; color: var(--muted); width: 22px; text-align: right; flex-shrink: 0; }
+  .quest-text { font-size: 11px; color: var(--light-gray); flex: 1; line-height: 1.4; }
+  .vote-tag { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 4px; flex-shrink: 0; }
+  .vote-yes { background: var(--amber-light); color: var(--amber); border: 1px solid rgba(200,149,26,0.3); }
+  .vote-no { background: rgba(255,255,255,0.04); color: var(--muted); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Slow <span>Nomad</span></div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showPage('cover')">Огляд</button>
+    <button class="nav-link" onclick="showPage('research')">Бенчмарк</button>
+    <button class="nav-link" onclick="showPage('nomadlist')">NomadList Partnership</button>
+    <button class="nav-link" onclick="showPage('layers')">Шари мапи (47)</button>
+    <button class="nav-link" onclick="showPage('personas')">9 Персон</button>
+    <button class="nav-link" onclick="showPage('wireframe')">Wireframe</button>
+    <button class="nav-link" onclick="showPage('quest')">Квест реновації</button>
+    <button class="nav-link" onclick="showPage('journey')">Journey flows</button>
+  </div>
+  <button class="nav-cta" onclick="showPage('quest')">Buenos Aires →</button>
+</nav>
+
+<!-- COVER -->
+<div id="page-cover" class="page active">
+  <div class="cover">
+    <div class="cover-badge">Investor & Partner Package · March 2026</div>
+    <h1>Slow <span>Nomad</span></h1>
+    <div style="font-size:12px;color:var(--muted);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:16px">Urban & Jungle Network</div>
+    <p class="cover-sub">Distributed co-ownership hospitality infrastructure for digital nomads. Not a hotel. Not a club. A network of places that belong to those who live in them.</p>
+    <div class="cover-stats">
+      <div class="stat-box"><div class="stat-v">40M+</div><div class="stat-l">Digital Nomads</div></div>
+      <div class="stat-box"><div class="stat-v">$12.6B</div><div class="stat-l">Fractional Market</div></div>
+      <div class="stat-box"><div class="stat-v">55+</div><div class="stat-l">Nomad Visa Countries</div></div>
+      <div class="stat-box"><div class="stat-v">$35k</div><div class="stat-l">Entry Threshold</div></div>
+      <div class="stat-box"><div class="stat-v">44%</div><div class="stat-l">Projected ROI</div></div>
+    </div>
+    <div class="cover-nav-grid">
+      <div class="cover-nav-item" onclick="showPage('research')">
+        <div class="icon">📊</div>
+        <div class="title">Market Benchmark</div>
+        <div class="desc">Top-5 competitors. Where we lead, where we lag. Critical gaps analysis.</div>
+      </div>
+      <div class="cover-nav-item" onclick="showPage('nomadlist')">
+        <div class="icon">🌍</div>
+        <div class="title">NomadList Partnership</div>
+        <div class="desc">100k+ nomads, API integration, Pieter Levels personal stake proposal.</div>
+      </div>
+      <div class="cover-nav-item" onclick="showPage('layers')">
+        <div class="icon">🗺</div>
+        <div class="title">47 Map Layers</div>
+        <div class="desc">Data architecture: fog of risk + quality highlights + interest filters.</div>
+      </div>
+      <div class="cover-nav-item" onclick="showPage('personas')">
+        <div class="icon">◎</div>
+        <div class="title">9 Personas</div>
+        <div class="desc">System-assigned statuses. From Pointer to Sower. Flip cards with full journeys.</div>
+      </div>
+      <div class="cover-nav-item" onclick="showPage('wireframe')">
+        <div class="icon">📱</div>
+        <div class="title">Product Wireframes</div>
+        <div class="desc">Map flow, Investment pool, Renovation quest. 11 screens.</div>
+      </div>
+      <div class="cover-nav-item" onclick="showPage('quest')">
+        <div class="icon">🏗</div>
+        <div class="title">Renovation Quest</div>
+        <div class="desc">35 tasks across 5 phases. 13 community votes. Buenos Aires Viamonte 1400.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESEARCH -->
+<div id="page-research" class="page">
+  <div class="content">
+    <div class="section-title">Market Benchmark</div>
+    <p class="section-sub">No existing platform combines fractional co-ownership, community governance, data-driven location discovery, and a mobile super-app for digital nomads. This is simultaneously the greatest opportunity and the most dangerous risk.</p>
+
+    <div class="insight-box">
+      <div class="insight-label">Key Finding</div>
+      <div class="insight-text">Selina ($1.2B valuation) collapsed in 2024. Remote Year shut down December 2024. The market has a gaping hole in nomad-focused hospitality — and Slow Nomad is the only concept that combines ownership with community with infrastructure.</div>
+    </div>
+
+    <div class="benchmark-card">
+      <div class="benchmark-header">
+        <div class="benchmark-name">Pacaso</div>
+        <span class="benchmark-tag tag-amber">Closest Structural Analog</span>
+      </div>
+      <div class="benchmark-body">$300M+ equity + $1B debt. 1,000+ properties, 40 markets. $150M ARR. Each property in dedicated LLC; buyers purchase ⅛–½ shares ($200k–$945k). Just launched "Global Swap" in 2025 — directly mirrors our cross-booking. <strong style="color:var(--text)">Average share price: $755k.</strong></div>
+      <div class="benchmark-gap">
+        <div class="gap-label">Gap we exploit</div>
+        <div class="gap-text">Pacaso targets wealthy second-home buyers, not nomads. Zero community features. No data layers. No nomad-specific infrastructure. It solves an ownership problem and ignores the lifestyle entirely.</div>
+      </div>
+    </div>
+
+    <div class="benchmark-card">
+      <div class="benchmark-header">
+        <div class="benchmark-name">NomadList (Pieter Levels)</div>
+        <span class="benchmark-tag tag-green">Partnership Opportunity</span>
+      </div>
+      <div class="benchmark-body">$5.3M revenue in 2024. 100k+ members. 2,500+ cities ranked across 50+ data dimensions. 247+ real-life meetups annually. Tracks 383,000+ check-ins. The de-facto information layer for global nomads. <strong style="color:var(--text)">One-person operation — Levels is distracted by AI projects.</strong></div>
+      <div class="benchmark-gap">
+        <div class="gap-label">Gap we exploit</div>
+        <div class="gap-text">NomadList is an information product, not a hospitality platform. It doesn't provide housing, facilitate ownership, or create structured communities. An API integration converts their informational audience into Slow Nomad residents.</div>
+      </div>
+    </div>
+
+    <div class="benchmark-card">
+      <div class="benchmark-header">
+        <div class="benchmark-name">Kindred</div>
+        <span class="benchmark-tag tag-amber">$148M raised · Feb 2026</span>
+      </div>
+      <div class="benchmark-body">300,000+ members, 150+ cities. Credit-based home-swapping — "give a night, get a night." Added 150,000 members in 2025 alone. Index Ventures + NEA backing. Plans "interconnected sub-communities."</div>
+      <div class="benchmark-gap">
+        <div class="gap-label">Gap we exploit</div>
+        <div class="gap-text">No ownership — members swap existing homes. Not nomad-focused (90% primary residences). No workspace infrastructure. No data layers. It's peer-to-peer exchange, not portfolio management.</div>
+      </div>
+    </div>
+
+    <div class="benchmark-card">
+      <div class="benchmark-header">
+        <div class="benchmark-name">Outsite</div>
+        <span class="benchmark-tag tag-green">Sole surviving coliving brand</span>
+      </div>
+      <div class="benchmark-body">~50 properties, 5,000+ members, $99/year membership. Profitable since Q3 2023. 4.9/5 ratings. Survived the brutal market correction that killed Selina, Common, Remote Year.</div>
+      <div class="benchmark-gap">
+        <div class="gap-label">Gap we exploit</div>
+        <div class="gap-text">No ownership component — purely rental. Community building is their acknowledged weakness. Properties simultaneously listed on Booking.com, diluting community with transient guests. Basic tech stack.</div>
+      </div>
+    </div>
+
+    <div class="benchmark-card">
+      <div class="benchmark-header">
+        <div class="benchmark-name">Cabin DAO</div>
+        <span class="benchmark-tag tag-red">Wound down 2025 — critical lesson</span>
+      </div>
+      <div class="benchmark-body">21+ coliving properties, 4,200 members, 355 "citizens" with NFT passports. Voted to wind down formal DAO structure in 2025. Coordination costs of bridging on-chain governance with physical property management proved unsustainable.</div>
+      <div class="benchmark-gap">
+        <div class="gap-label">What this teaches Slow Nomad</div>
+        <div class="gap-text">Pure DAO governance fails for physical assets. Multi-day votes don't work when a pipe bursts. Slow Nomad's "DAO-like" governance is exactly that: community shapes standards during renovation, professional management operates within those standards. Community votes on what color the trash bags are. Management decides when to take out the trash.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOMADLIST -->
+<div id="page-nomadlist" class="page">
+  <div class="content">
+    <div class="section-title">NomadList Partnership</div>
+    <p class="section-sub">100,000+ digital nomads who check city rankings every month are Slow Nomad's primary audience. The question they ask NomadList — "where should I live?" — and the question we answer — "where should I own?" — are the same question at different depths of commitment.</p>
+
+    <div class="partner-card">
+      <div class="partner-header">
+        <div class="partner-icon" style="background:rgba(42,90,138,0.15);">🌍</div>
+        <div>
+          <div class="partner-name">Pieter Levels · NomadList</div>
+          <div class="partner-sub">$5.3M ARR · Solo founder · 100k+ members · distracted by AI projects</div>
+        </div>
+      </div>
+      <p class="partner-body">Levels built the definitive data infrastructure for digital nomads — 2,500+ cities, 50+ dimensions, real-time check-ins. But NomadList is an information product. It doesn't house nomads, doesn't manage communities, doesn't facilitate ownership. His own words: "NomadList is becoming infrastructure, not a product." He's increasingly focused on Photo AI ($138k/month) and other AI ventures. The platform's community layer is Telegram-based and fragmented. The transition from "information tool" to "lifestyle platform" is a step he hasn't taken and likely won't take alone.</p>
+
+      <div class="insight-box" style="margin:16px 0;">
+        <div class="insight-label">The Proposal</div>
+        <div class="insight-text">API integration that places Slow Nomad community data inside NomadList city pages. "X members currently in Tbilisi. Y slots available." Direct conversion path. In exchange: Pieter Levels gets a personal one-month-per-year slot across Slow Nomad properties — his own pin on the map, forever. He becomes the network's first high-profile Freediver. His audience stays engaged with NomadList because it now connects to real places to live, not just rankings.</div>
+      </div>
+
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;font-weight:600;">API Integration Flow</div>
+      <div class="api-flow">
+        <div class="api-step">
+          <div class="api-step-n">Step 1</div>
+          <div class="api-step-t">NomadList city page</div>
+          <div class="api-step-d">User viewing Tbilisi rankings, cost of living, visa info</div>
+        </div>
+        <div class="api-arrow">›</div>
+        <div class="api-step">
+          <div class="api-step-n">Step 2</div>
+          <div class="api-step-t">Slow Nomad widget</div>
+          <div class="api-step-d">"14 members here now. 2 slots available Oct–Dec." via our API</div>
+        </div>
+        <div class="api-arrow">›</div>
+        <div class="api-step">
+          <div class="api-step-n">Step 3</div>
+          <div class="api-step-t">Click → Map</div>
+          <div class="api-step-d">Opens Slow Nomad heat map filtered to Tbilisi with community layer</div>
+        </div>
+        <div class="api-arrow">›</div>
+        <div class="api-step">
+          <div class="api-step-n">Step 4</div>
+          <div class="api-step-t">Onboarding</div>
+          <div class="api-step-d">Persona assignment, compliance quest, first booking or ownership inquiry</div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:var(--muted);margin-top:16px;line-height:1.6;">Revenue sharing model: Slow Nomad pays NomadList a referral fee per converted member (suggested: $50–150 per first booking, $500 per ownership transaction). NomadList's data APIs (city scores, visa info, climate data) power Slow Nomad's heat map layers, reducing our data acquisition costs.</div>
+    </div>
+
+    <div class="partner-card">
+      <div class="partner-header">
+        <div class="partner-icon" style="background:rgba(90,122,64,0.15);">📡</div>
+        <div>
+          <div class="partner-name">Foursquare Places API</div>
+          <div class="partner-sub">Community pins · Local discovery · Gastronomy layer</div>
+        </div>
+      </div>
+      <p class="partner-body">Foursquare's Places API provides venue data — cafés, coworking spaces, restaurants, healthcare — that powers the interest layers on the Slow Nomad map. Members add community pins ("best espresso in Batumi," "reliable WiFi coworking near Viamonte") that layer on top of official venue data. This creates a proprietary community-sourced knowledge graph that competitors cannot replicate.</p>
+    </div>
+  </div>
+</div>
+
+<!-- LAYERS -->
+<div id="page-layers" class="page">
+  <div class="content">
+    <div class="section-title">47 шарів мапи</div>
+    <p class="section-sub">Три типи шарів: Туман ризику (негативні шари що затуманюють небезпечні зони), Підсвітка якості (позитивні шари що підсвічують хороші умови), Шари інтересів (тематичні фільтри без туману). Кожен шар підключений до відкритого API з конкретною частотою оновлення.</p>
+
+    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+      <button onclick="filterLayers('all')" id="lf-all" style="padding:5px 14px;border-radius:18px;border:1px solid var(--amber);background:var(--amber-light);color:var(--amber);font-size:10px;font-weight:700;cursor:pointer;">Всі (47)</button>
+      <button onclick="filterLayers('risk')" id="lf-risk" style="padding:5px 14px;border-radius:18px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:10px;cursor:pointer;">Туман-ризики (16)</button>
+      <button onclick="filterLayers('quality')" id="lf-quality" style="padding:5px 14px;border-radius:18px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:10px;cursor:pointer;">Підсвітка-якість (13)</button>
+      <button onclick="filterLayers('interest')" id="lf-interest" style="padding:5px 14px;border-radius:18px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:10px;cursor:pointer;">Інтереси (18)</button>
+    </div>
+
+    <div class="layers-grid" id="layers-grid">
+    </div>
+  </div>
+</div>
+
+<!-- PERSONAS -->
+<div id="page-personas" class="page">
+  <div style="padding-top:48px;height:calc(100vh - 48px);">
+    <div class="demo-label" style="padding:12px 24px 0;font-size:11px;color:var(--muted);">9 персон · статуси присвоює система · клікни картку щоб перегорнути</div>
+    <iframe src="nomad_personas_v2.html" style="width:100%;height:calc(100% - 32px);border:none;" title="Personas"></iframe>
+  </div>
+</div>
+
+<!-- WIREFRAME -->
+<div id="page-wireframe" class="page">
+  <div style="padding-top:48px;height:calc(100vh - 48px);">
+    <div class="demo-label" style="padding:12px 24px 0;">Wireframe · 11 screens · Flow 1: Map→Pin→City · Flow 2: Investment Pool</div>
+    <iframe src="nomad_wireframe.html" style="width:100%;height:calc(100% - 32px);border:none;" title="Wireframe"></iframe>
+  </div>
+</div>
+
+<!-- QUEST -->
+<div id="page-quest" class="page">
+  <div class="content">
+    <div class="section-title">Квест реновації</div>
+    <p class="section-sub">Viamonte 1400, Buenos Aires · Старт Q3 2026 · 35 завдань у 5 фазах · 13 голосувань комʼюніті · Механіка причасності: громада що пройшла реновацію разом приходить до операційного старту з готовою культурою рішень.</p>
+
+    <div class="insight-box">
+      <div class="insight-label">Ключова ідея</div>
+      <div class="insight-text">Стандарти Slow Nomad (аналог Kempinski для бутик-формату) затверджуються громадою в перші три тижні реновації. Далі операційний менеджмент діє <em>всередині</em> цих стандартів без голосувань. Комʼюніті голосує за колір сміттєвих пакетів — менеджмент вирішує коли їх виносити.</div>
+    </div>
+    <div id="quest-content"></div>
+  </div>
+</div>
+
+<!-- JOURNEY -->
+<div id="page-journey" class="page">
+  <div style="padding-top:48px;height:calc(100vh - 48px);">
+    <div class="demo-label" style="padding:12px 24px 0;">User Journey Flows · Onboarding · Cross-booking · Investment Pool</div>
+    <iframe src="nomad_club_journey_html.html" style="width:100%;height:calc(100% - 32px);border:none;" title="Journey"></iframe>
+  </div>
+</div>
+
+<script>
+// ── Navigation ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'))
+  document.getElementById('page-' + id).classList.add('active')
+  const links = document.querySelectorAll('.nav-link')
+  const pages = ['cover','research','nomadlist','layers','personas','wireframe','quest','journey']
+  const idx = pages.indexOf(id)
+  if (idx >= 0) links[idx].classList.add('active')
+}
+
+// ── Layers data ──
+const LAYERS = [
+  {emoji:'⚔',name:'Конфлікти і война',src:'ACLED/UCDP',type:'risk',upd:'Щотижня'},
+  {emoji:'🔒',name:'Рівень злочинності',src:'Numbeo API',type:'risk',upd:'Квартально'},
+  {emoji:'🏛',name:'Корупція (CPI)',src:'Transparency Intl',type:'risk',upd:'Щорічно'},
+  {emoji:'⚠️',name:'Попередження мандрівникам',src:'USA/UK Gov RSS',type:'risk',upd:'Real-time'},
+  {emoji:'🌊',name:'Ризик стихійних лих',src:'UNDRR / EM-DAT',type:'risk',upd:'Щорічно'},
+  {emoji:'🌫',name:'Якість повітря (AQI)',src:'OpenAQ / Google',type:'risk',upd:'Real-time'},
+  {emoji:'🌦',name:'Кліматичні зони',src:'NASA / Open-Meteo',type:'risk',upd:'Real-time'},
+  {emoji:'🌋',name:'Ризик землетрусів',src:'USGS / NOAA',type:'risk',upd:'Real-time'},
+  {emoji:'🌊',name:'Ризик підйому моря 2050',src:'Climate Central',type:'risk',upd:'Щорічно'},
+  {emoji:'🛂',name:'Візові барʼєри',src:'KPMG / Henley',type:'risk',upd:'Щомісяця'},
+  {emoji:'⚖️',name:'Заборона власності',src:'World Bank',type:'risk',upd:'Щорічно'},
+  {emoji:'🏳️‍🌈',name:'LGBTQ+ Safety (ILGA)',src:'ILGA World',type:'risk',upd:'Щорічно'},
+  {emoji:'📊',name:'LGBTQ+ Equaldex Index',src:'Equaldex API',type:'risk',upd:'Квартально'},
+  {emoji:'🗺',name:'WVS Tolerance Map',src:'World Values Survey',type:'risk',upd:'5 років'},
+  {emoji:'🦟',name:'Ризик малярії',src:'CDC / WHO',type:'risk',upd:'Щорічно'},
+  {emoji:'📰',name:'Свобода преси (RSF)',src:'RSF / Freedom House',type:'risk',upd:'Щорічно'},
+  {emoji:'📡',name:'Швидкість інтернету',src:'Speedtest / Ookla',type:'quality',upd:'Квартально'},
+  {emoji:'🛰',name:'Покриття Starlink',src:'Starlink GeoIP',type:'quality',upd:'Щомісяця'},
+  {emoji:'📶',name:'Покриття 4G/5G',src:'OpenCelliD / GSMA',type:'quality',upd:'Щомісяця'},
+  {emoji:'✈',name:'Nomad Visa статус',src:'NomadVisaGuide',type:'quality',upd:'Щомісяця'},
+  {emoji:'📋',name:'DN Tax & Visa ease',src:'Equaldex / GNomad',type:'quality',upd:'Квартально'},
+  {emoji:'💰',name:'COL-індекс (Numbeo)',src:'Numbeo API',type:'quality',upd:'Щомісяця'},
+  {emoji:'🏠',name:'Ціни на оренду',src:'Numbeo / GPG',type:'quality',upd:'Щомісяця'},
+  {emoji:'📈',name:'Дохідність оренди (yield)',src:'Global Property Guide',type:'quality',upd:'Квартально'},
+  {emoji:'🏢',name:'Ціни покупки ($/м²)',src:'Numbeo / GPG',type:'quality',upd:'Квартально'},
+  {emoji:'😊',name:'Індекс щастя (WHR)',src:'UN / Gallup',type:'quality',upd:'Щорічно'},
+  {emoji:'✈',name:'Відстань до аеропорту',src:'OurAirports',type:'quality',upd:'Щорічно'},
+  {emoji:'🏥',name:'Лікарні / медицина',src:'Healthsites.io',type:'quality',upd:'Щорічно'},
+  {emoji:'⏰',name:'Timezone overlap (EST/CET)',src:'Google Time Zone',type:'quality',upd:'Статично'},
+  {emoji:'👥',name:'Expat-комʼюніті',src:'Meetup / Internations',type:'quality',upd:'Real-time'},
+  {emoji:'🤝',name:'Community Vibe',src:'Meetup / Eventbrite',type:'quality',upd:'Щотижня'},
+  {emoji:'🏄',name:'Blue Flag пляжі',src:'UNESCO IHO',type:'interest',upd:'Сезонно'},
+  {emoji:'🏺',name:'Обʼєкти ЮНЕСКО',src:'UNESCO Heritage',type:'interest',upd:'Щорічно'},
+  {emoji:'🍽',name:'Гастрономія (TasteAtlas)',src:'Foursquare / TasteAtlas',type:'interest',upd:'Real-time'},
+  {emoji:'🧘',name:'Wellness центри',src:'Foursquare / OSM',type:'interest',upd:'Real-time'},
+  {emoji:'🤿',name:'Серфінг / активності',src:'Surfline / Trailforks',type:'interest',upd:'Real-time'},
+  {emoji:'🍷',name:'Вино і виноробство',src:'Wine-Searcher / OSM',type:'interest',upd:'Щорічно'},
+  {emoji:'🕌',name:'Духовні місця',src:'OSM / Wikipedia',type:'interest',upd:'Статично'},
+  {emoji:'🩺',name:'Медичний туризм',src:'MTQUA / Bookimed',type:'interest',upd:'Щорічно'},
+  {emoji:'🎭',name:'Культурні події',src:'Eventbrite API',type:'interest',upd:'Real-time'},
+  {emoji:'💻',name:'IT / стартап-екосистема',src:'Crunchbase/StartupBlink',type:'interest',upd:'Щомісяця'},
+  {emoji:'👨‍👩‍👧',name:'Для сімей з дітьми',src:'Safety/school index',type:'interest',upd:'Щорічно'},
+  {emoji:'🐕',name:'Pet-friendly',src:'OSM / OpenPetition',type:'interest',upd:'Статично'},
+  {emoji:'🌿',name:'Еко / природні парки',src:'IUCN / UNESCO',type:'interest',upd:'Щорічно'},
+  {emoji:'📊',name:'Hofstede — культурний профіль',src:'Hofstede Insights',type:'interest',upd:'5 років'},
+  {emoji:'🗺',name:'WVS — Cultural Map',src:'World Values Survey',type:'interest',upd:'5 років'},
+  {emoji:'👤',name:'Кількість номадів зараз',src:'NomadList API',type:'interest',upd:'Real-time'},
+]
+
+function renderLayers(filter) {
+  const grid = document.getElementById('layers-grid')
+  const filtered = filter === 'all' ? LAYERS : LAYERS.filter(l => l.type === filter)
+  const typeLabel = {risk:'Туман', quality:'Якість', interest:'Інтерес'}
+  const typeClass = {risk:'type-risk', quality:'type-quality', interest:'type-interest'}
+  grid.innerHTML = filtered.map(l => `
+    <div class="layer-mini">
+      <div class="layer-mini-icon">${l.emoji}</div>
+      <div class="layer-mini-name">${l.name}</div>
+      <div class="layer-mini-src">${l.src} · ${l.upd}</div>
+      <div class="layer-mini-type ${typeClass[l.type]}">${typeLabel[l.type]}</div>
+    </div>
+  `).join('')
+}
+
+function filterLayers(f) {
+  document.querySelectorAll('[id^=lf-]').forEach(b => {
+    b.style.borderColor = 'var(--border)'; b.style.background = 'transparent'; b.style.color = 'var(--muted)'
+  })
+  const btn = document.getElementById('lf-'+f)
+  btn.style.borderColor = 'var(--amber)'; btn.style.background = 'var(--amber-light)'; btn.style.color = 'var(--amber)'
+  renderLayers(f)
+}
+
+renderLayers('all')
+
+// ── Quest data ──
+const QUEST = [
+  {phase:'Верифікація', color:'#0C447C', bg:'rgba(12,68,124,0.15)', tasks:[
+    {n:1, t:'Визначити назву та концепцію обʼєкту', vote:true},
+    {n:2, t:'Затвердити розбивку номерів і планування', vote:true},
+    {n:3, t:'Архітектурна перевірка: виходи, безпека, пожежний план', vote:false},
+    {n:4, t:'Огляд фундаменту і несучих конструкцій (81-річна будівля)', vote:false},
+    {n:5, t:'Перевірка зонування і дозволу на hospitality use (C2 → hospitality)', vote:false},
+    {n:6, t:'Реєстрація SPV — smart-contract unlock для власників', vote:false},
+    {n:7, t:'Затвердити фінансову модель пулу', vote:true},
+    {n:8, t:'Відкрити рахунок SPV в локальному банку-партнері', vote:false},
+  ]},
+  {phase:'Дизайн', color:'#7C3AED', bg:'rgba(124,58,237,0.10)', tasks:[
+    {n:9, t:'Вибір концепції інтерʼєру — 10 осіб, 4 підгрупи, 1 тиждень', vote:true},
+    {n:10, t:'Вибір кольорової схеми і матеріалів', vote:true},
+    {n:11, t:'Затвердити FFE-список (меблі, фіксаційне обладнання, декор)', vote:true},
+    {n:12, t:'Розробити план інженерних мереж (електрика, сантехніка, HVAC)', vote:false},
+    {n:13, t:'Вибір системи управління обʼєктом (PMS: Cloudbeds / Apaleo / Opera)', vote:true},
+    {n:14, t:'Розробити F&B концепцію (сніданки, кафе, бар, зона коворкінгу)', vote:true},
+  ]},
+  {phase:'Реновація', color:'#9A3412', bg:'rgba(154,52,18,0.10)', tasks:[
+    {n:15, t:'Тендер підрядника реновації — презентація 3 кандидатів', vote:true},
+    {n:16, t:'Перший прямий стрім з будмайданчика', vote:false},
+    {n:17, t:'Щотижневий відео-репорт для всіх власників пулу', vote:false},
+    {n:18, t:'Голосування за назву кафе / ресторану / бару', vote:true},
+    {n:19, t:'Підписати договори з постачальниками мʼяких товарів', vote:false},
+    {n:20, t:'Mock-up room review — огляд зразкового номеру власниками', vote:true},
+    {n:21, t:'Встановити систему безпеки, CCTV, цифрові замки на кімнатах', vote:false},
+    {n:22, t:'Підготувати операційні SOPs за мережевим стандартом Slow Nomad', vote:false},
+  ]},
+  {phase:'Передвідкриття', color:'#065F46', bg:'rgba(6,95,70,0.10)', tasks:[
+    {n:23, t:'Відбір менеджменту — відеоінтервʼю + голосування власників', vote:true},
+    {n:24, t:'Сформувати команду: рецепція, прибирання, F&B, консʼєрж', vote:false},
+    {n:25, t:'Встановити і налаштувати PMS-систему', vote:false},
+    {n:26, t:'Підключити Booking Engine до обʼєкту (direct bookings)', vote:false},
+    {n:27, t:'Тестування цифрового ключа — всі номери (NFC + backup)', vote:false},
+    {n:28, t:'Тренінг персоналу за мережевими стандартами', vote:false},
+    {n:29, t:'Menu rehearsal — тестовий сніданок для власників пулу', vote:true},
+    {n:30, t:'Процедура звільнення персоналу — ухвалення власниками', vote:true},
+    {n:31, t:'Затвердити Exit Strategy документ (умови виходу 25%+)', vote:true},
+    {n:32, t:'Додати обʼєкт на теплову карту мережі Slow Nomad', vote:false},
+  ]},
+  {phase:'Відкриття', color:'#0F6E56', bg:'rgba(15,110,86,0.08)', tasks:[
+    {n:33, t:'Церемонія відкриття — власники присутні або онлайн', vote:false},
+    {n:34, t:'Фіналізація реєстрації часток у мережевому реєстрі', vote:false},
+    {n:35, t:'Перший місяць: щотижневий звіт операцій власникам', vote:false},
+  ]},
+]
+
+const questEl = document.getElementById('quest-content')
+QUEST.forEach(phase => {
+  const voteCount = phase.tasks.filter(t => t.vote).length
+  questEl.innerHTML += `
+    <div class="phase-block">
+      <div class="phase-header">
+        <div class="phase-num" style="background:${phase.bg};color:${phase.color};">${phase.tasks[0].n}–${phase.tasks[phase.tasks.length-1].n}</div>
+        <div class="phase-title">${phase.phase}</div>
+        <div class="phase-count">${phase.tasks.length} завдань${voteCount ? ` · ${voteCount} голосувань` : ''}</div>
+      </div>
+      ${phase.tasks.map(t => `
+        <div class="quest-row">
+          <div class="quest-n">${t.n}</div>
+          <div class="quest-text">${t.t}</div>
+          <div class="vote-tag ${t.vote ? 'vote-yes' : 'vote-no'}">${t.vote ? 'VOTE' : 'INFO'}</div>
+        </div>
+      `).join('')}
+    </div>
+  `
+})
+</script>
+</body>
+</html>

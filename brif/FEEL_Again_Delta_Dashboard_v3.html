@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark" data-lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEEL Again — Delta Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   THEME SYSTEM — gold/navy/teal
+   ══════════════════════════════════════════════ */
+:root {
+  --gold: #c8a45c;
+  --gold-dim: #8b6914;
+  --gold-glow: rgba(200,164,92,0.15);
+  --navy: #0a1628;
+  --navy-mid: #121e33;
+  --navy-light: #1a2a45;
+  --teal: #2ec4b6;
+  --teal-dim: #1a8a7e;
+  --red: #ef4444;
+  --red-dim: rgba(239,68,68,0.15);
+  --orange: #f59e0b;
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,0.15);
+  --purple: #a855f7;
+  --cyan: #06b6d4;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-head: 'Space Grotesk', 'DM Sans', system-ui, sans-serif;
+}
+[data-theme="dark"] {
+  --bg: #050a12;
+  --bg2: #0a1628;
+  --bg3: #121e33;
+  --bg-card: rgba(10,22,40,0.85);
+  --bg-card-hover: rgba(18,30,51,0.95);
+  --border: rgba(200,164,92,0.15);
+  --border-active: rgba(200,164,92,0.4);
+  --text: #e2e8f0;
+  --text-dim: #8896ab;
+  --text-bright: #f8fafc;
+  --sidebar-bg: rgba(5,10,18,0.95);
+  --delta-now-bg: rgba(239,68,68,0.06);
+  --delta-infra-bg: rgba(46,196,182,0.06);
+  --delta-bridge-bg: rgba(200,164,92,0.08);
+  --slider-track: #1a2a45;
+  --slider-now: #ef4444;
+  --slider-infra: #2ec4b6;
+}
+[data-theme="light"] {
+  --bg: #f2f0eb;
+  --bg2: #e8e4dc;
+  --bg3: #fff;
+  --bg-card: rgba(255,255,255,0.92);
+  --bg-card-hover: #fff;
+  --border: rgba(139,105,20,0.15);
+  --border-active: rgba(139,105,20,0.4);
+  --text: #1f2430;
+  --text-dim: #5a6375;
+  --text-bright: #0a1628;
+  --sidebar-bg: rgba(255,255,255,0.97);
+  --delta-now-bg: rgba(239,68,68,0.05);
+  --delta-infra-bg: rgba(46,196,182,0.05);
+  --delta-bridge-bg: rgba(200,164,92,0.06);
+  --slider-track: #e0ddd6;
+  --slider-now: #dc2626;
+  --slider-infra: #0d9488;
+}
+
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:14px;scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font-sans);
+  line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s;
+}
+h1,h2,h3,h4{font-family:var(--font-head);color:var(--text-bright);font-weight:600}
+
+/* LAYOUT */
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+@media(max-width:960px){.app{grid-template-columns:1fr}.sidebar{display:none}}
+
+/* SIDEBAR */
+.sidebar{
+  background:var(--sidebar-bg);border-right:1px solid var(--border);
+  padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:10;
+}
+.sidebar-logo{
+  padding:0 20px 16px;font-family:var(--font-head);font-size:15px;font-weight:700;
+  color:var(--gold);border-bottom:1px solid var(--border);margin-bottom:12px;
+}
+.sidebar-logo small{display:block;font-size:10px;color:var(--text-dim);font-weight:400;margin-top:2px;letter-spacing:0.5px}
+.sidebar-nav a{
+  display:flex;align-items:center;gap:10px;padding:10px 20px;
+  color:var(--text-dim);font-size:13px;text-decoration:none;
+  border-left:3px solid transparent;transition:all .2s;
+}
+.sidebar-nav a:hover,.sidebar-nav a.active{
+  color:var(--gold);background:var(--gold-glow);border-left-color:var(--gold);
+}
+.sidebar-nav a .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* CONTROLS */
+.controls{
+  display:flex;align-items:center;gap:16px;padding:12px 24px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:9;
+}
+.controls-left{display:flex;align-items:center;gap:12px;flex:1}
+.controls-right{display:flex;align-items:center;gap:8px}
+.btn-toggle{
+  padding:6px 14px;border-radius:6px;border:1px solid var(--border);
+  background:transparent;color:var(--text-dim);cursor:pointer;font-size:12px;
+  font-family:var(--font-sans);transition:all .2s;
+}
+.btn-toggle:hover,.btn-toggle.active{
+  background:var(--gold-glow);color:var(--gold);border-color:var(--gold-dim);
+}
+.view-mode{
+  display:inline-flex;border-radius:6px;overflow:hidden;border:1px solid var(--border);
+}
+.view-mode button{
+  padding:6px 16px;border:none;background:transparent;color:var(--text-dim);
+  cursor:pointer;font-size:12px;font-family:var(--font-sans);transition:all .2s;
+}
+.view-mode button.active{background:var(--gold);color:var(--navy)}
+
+/* MAIN */
+.main{padding:24px;max-width:1400px;overflow-y:auto}
+
+/* HERO */
+.hero{
+  text-align:center;padding:32px 24px 24px;margin-bottom:28px;
+  border-bottom:1px solid var(--border);
+}
+.hero h1{font-size:22px;color:var(--gold);margin-bottom:6px}
+.hero .subtitle{font-size:13px;color:var(--text-dim);max-width:800px;margin:0 auto 12px}
+.hero .concept{
+  display:inline-flex;align-items:center;gap:20px;
+  padding:10px 24px;border-radius:8px;background:var(--delta-bridge-bg);
+  border:1px solid var(--border);margin-top:8px;
+}
+.concept-col{text-align:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.concept-col.now{color:var(--red)}
+.concept-col.delta{color:var(--gold);font-size:14px}
+.concept-col.infra{color:var(--teal)}
+.concept-arrow{color:var(--text-dim);font-size:18px}
+
+/* DELTA BLOCK */
+.delta-block{
+  margin-bottom:28px;border-radius:12px;overflow:hidden;
+  border:1px solid var(--border);background:var(--bg-card);
+  transition:border-color .3s;
+}
+.delta-block:hover{border-color:var(--border-active)}
+.delta-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+}
+.delta-header h3{font-size:15px;display:flex;align-items:center;gap:10px}
+.delta-header h3 .num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:6px;background:var(--gold);
+  color:var(--navy);font-size:12px;font-weight:700;
+}
+.delta-toggle{
+  display:flex;align-items:center;gap:8px;
+}
+.delta-toggle label{font-size:11px;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer}
+.delta-toggle label.lbl-now{color:var(--red)}
+.delta-toggle label.lbl-infra{color:var(--teal)}
+.toggle-switch{
+  position:relative;width:48px;height:24px;cursor:pointer;
+}
+.toggle-switch input{display:none}
+.toggle-track{
+  position:absolute;inset:0;border-radius:12px;
+  background:var(--slider-now);transition:background .3s;
+}
+.toggle-switch input:checked + .toggle-track{background:var(--slider-infra)}
+.toggle-thumb{
+  position:absolute;top:2px;left:2px;width:20px;height:20px;
+  border-radius:50%;background:#fff;transition:left .3s;box-shadow:0 1px 4px rgba(0,0,0,0.3);
+}
+.toggle-switch input:checked ~ .toggle-thumb{left:26px}
+
+/* DELTA CONTENT PANELS */
+.delta-body{position:relative;min-height:220px}
+.delta-panel{
+  padding:20px;transition:opacity .4s, transform .4s;
+}
+.delta-panel.hidden{display:none}
+
+/* NOW panel */
+.panel-now{background:var(--delta-now-bg)}
+.panel-infra{background:var(--delta-infra-bg)}
+
+/* DATA SOURCE BADGE */
+.source-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:4px;font-size:10px;font-weight:500;
+  letter-spacing:0.3px;
+}
+.source-badge.manual{background:rgba(239,68,68,0.12);color:var(--red)}
+.source-badge.realtime{background:rgba(46,196,182,0.12);color:var(--teal)}
+.source-badge.verified{background:rgba(200,164,92,0.12);color:var(--gold)}
+
+/* METRIC ROW */
+.metric-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;
+}
+@media(max-width:700px){.metric-row{grid-template-columns:1fr}}
+.metric-card{
+  padding:14px 16px;border-radius:8px;border:1px solid var(--border);
+  background:var(--bg-card);
+}
+.metric-card .label{font-size:11px;color:var(--text-dim);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.3px}
+.metric-card .value{font-size:24px;font-weight:700;font-family:var(--font-head);color:var(--text-bright)}
+.metric-card .sub{font-size:11px;color:var(--text-dim);margin-top:4px}
+.metric-card.highlight-red .value{color:var(--red)}
+.metric-card.highlight-teal .value{color:var(--teal)}
+.metric-card.highlight-gold .value{color:var(--gold)}
+
+/* BRIDGE STRIP */
+.bridge-strip{
+  padding:14px 20px;background:var(--delta-bridge-bg);
+  border-top:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:12px;
+}
+.bridge-icon{
+  flex-shrink:0;width:32px;height:32px;border-radius:8px;
+  background:var(--gold);color:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;
+}
+.bridge-text{font-size:12px;color:var(--text)}
+.bridge-text strong{color:var(--gold)}
+
+/* CHART CONTAINER */
+.chart-wrap{
+  position:relative;height:200px;margin:12px 0;
+}
+
+/* FLOW DIAGRAM */
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.flow-node{
+  padding:8px 14px;border-radius:6px;font-size:11px;font-weight:500;
+  border:1px solid var(--border);background:var(--bg3);color:var(--text);
+  text-align:center;min-width:80px;
+}
+.flow-node.active{border-color:var(--teal);color:var(--teal)}
+.flow-node.blocked{border-color:var(--red);color:var(--red);opacity:0.7}
+.flow-node.gold{border-color:var(--gold);color:var(--gold);background:var(--delta-bridge-bg)}
+.flow-arrow{color:var(--text-dim);font-size:16px}
+.flow-arrow.broken{color:var(--red);text-decoration:line-through}
+
+/* COMPARISON TABLE */
+.comp-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}
+.comp-table th{
+  text-align:left;padding:8px 12px;font-weight:600;font-size:11px;
+  text-transform:uppercase;letter-spacing:0.3px;color:var(--text-dim);
+  border-bottom:1px solid var(--border);
+}
+.comp-table td{padding:8px 12px;border-bottom:1px solid var(--border)}
+.comp-table .val-now{color:var(--red);font-weight:600}
+.comp-table .val-infra{color:var(--teal);font-weight:600}
+
+/* SYSTEMS GRID */
+.systems-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0;
+}
+@media(max-width:700px){.systems-grid{grid-template-columns:repeat(2,1fr)}}
+.sys-card{
+  padding:10px;border-radius:6px;border:1px solid var(--border);
+  text-align:center;font-size:11px;
+}
+.sys-card .sys-name{font-weight:600;color:var(--text-bright);margin-bottom:4px}
+.sys-card .sys-status{font-size:10px}
+.sys-card.disconnected{border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.04)}
+.sys-card.connected{border-color:rgba(46,196,182,0.3);background:rgba(46,196,182,0.04)}
+
+/* SUMMARY BOX */
+.summary-box{
+  margin-top:32px;padding:24px;border-radius:12px;
+  border:1px solid var(--gold-dim);background:var(--delta-bridge-bg);
+  text-align:center;
+}
+.summary-box h2{color:var(--gold);font-size:18px;margin-bottom:12px}
+.summary-box p{font-size:13px;color:var(--text);max-width:700px;margin:0 auto;line-height:1.7}
+
+/* FOOTER */
+.footer{
+  margin-top:40px;padding:20px 24px;border-top:1px solid var(--border);
+  font-size:11px;color:var(--text-dim);text-align:center;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.delta-block{animation:fadeIn .5s ease-out}
+.delta-block:nth-child(2){animation-delay:.05s}
+.delta-block:nth-child(3){animation-delay:.1s}
+.delta-block:nth-child(4){animation-delay:.15s}
+.delta-block:nth-child(5){animation-delay:.2s}
+.delta-block:nth-child(6){animation-delay:.25s}
+.delta-block:nth-child(7){animation-delay:.3s}
+
+/* Print */
+@media print{
+  .sidebar,.controls{display:none}
+  .app{grid-template-columns:1fr}
+  .delta-block{break-inside:avoid;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    FEEL Again
+    <small data-uk="Дельта-дашборд · Переговорний інструмент" data-en="Delta Dashboard · Negotiation Tool"></small>
+  </div>
+  <div class="sidebar-nav">
+    <a href="#hero" class="active"><span class="dot" style="background:var(--gold)"></span> <span data-uk="Огляд" data-en="Overview">Огляд</span></a>
+    <a href="#block-1"><span class="dot" style="background:var(--red)"></span> <span data-uk="mhGAP Воронка" data-en="mhGAP Funnel">mhGAP Воронка</span></a>
+    <a href="#block-2"><span class="dot" style="background:var(--red)"></span> <span data-uk="8 Систем" data-en="8 Systems">8 Систем</span></a>
+    <a href="#block-3"><span class="dot" style="background:var(--red)"></span> <span data-uk="$954M Кошти" data-en="$954M Funds">$954M Кошти</span></a>
+    <a href="#block-4"><span class="dot" style="background:var(--red)"></span> <span data-uk="Тіньовий сектор" data-en="Shadow Sector">Тіньовий сектор</span></a>
+    <a href="#block-5"><span class="dot" style="background:var(--red)"></span> <span data-uk="Беклог лікування" data-en="Treatment Backlog">Беклог лікування</span></a>
+    <a href="#block-6"><span class="dot" style="background:var(--red)"></span> <span data-uk="Донорська звітність" data-en="Donor Reporting">Донорська звітність</span></a>
+    <a href="#block-7"><span class="dot" style="background:var(--gold)"></span> <span data-uk="MH Економічний Індекс" data-en="MH Economic Index">MH Індекс</span></a>
+    <a href="#summary"><span class="dot" style="background:var(--teal)"></span> <span data-uk="Висновок" data-en="Summary">Висновок</span></a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="controls-left">
+    <div class="view-mode" id="viewMode">
+      <button class="active" data-view="delta" data-uk="ЗАРАЗ ↔ З ІНФРАСТРУКТУРОЮ" data-en="NOW ↔ WITH INFRASTRUCTURE">ЗАРАЗ ↔ З ІНФРАСТРУКТУРОЮ</button>
+      <button data-view="all-now" data-uk="ВСІ: ЗАРАЗ" data-en="ALL: NOW">ВСІ: ЗАРАЗ</button>
+      <button data-view="all-infra" data-uk="ВСІ: ІНФРАСТРУКТУРА" data-en="ALL: INFRASTRUCTURE">ВСІ: ІНФРАСТРУКТУРА</button>
+    </div>
+  </div>
+  <div class="controls-right">
+    <button class="btn-toggle" id="langBtn" onclick="toggleLang()">EN</button>
+    <button class="btn-toggle" id="themeBtn" onclick="toggleTheme()">☀</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <h1 data-uk="Сектор МЗПСП: Розрив даних як системна проблема" data-en="MHPSS Sector: The Data Gap as a Systemic Problem"></h1>
+  <p class="subtitle" data-uk="Що бачить стратег, коли дані збираються вручну з прес-релізів — і що він побачив би з цифровою інфраструктурою обміну даними" data-en="What a strategist sees when data is scraped from press releases — and what they would see with digital data exchange infrastructure"></p>
+  <div class="concept">
+    <div class="concept-col now" data-uk="ЗАРАЗ<br>Ручний збір" data-en="NOW<br>Manual scraping">ЗАРАЗ<br>Ручний збір</div>
+    <div class="concept-arrow">→</div>
+    <div class="concept-col delta">Δ</div>
+    <div class="concept-arrow">→</div>
+    <div class="concept-col infra" data-uk="З ІНФРАСТРУКТУРОЮ<br>Цифрові рейки" data-en="WITH INFRASTRUCTURE<br>Digital rails">З ІНФРАСТРУКТУРОЮ<br>Цифрові рейки</div>
+  </div>
+</div>
+
+<!-- ═══════════ BLOCK 1: mhGAP FUNNEL ═══════════ -->
+<div class="delta-block" id="block-1">
+  <div class="delta-header">
+    <h3><span class="num">1</span> <span data-uk="mhGAP Воронка: Сертифікати → Практика" data-en="mhGAP Funnel: Certificates → Practice">mhGAP Воронка: Сертифікати → Практика</span></h3>
+    <div class="delta-toggle">
+      <label class="lbl-now" data-uk="Зараз" data-en="Now">Зараз</label>
+      <div class="toggle-switch">
+        <input type="checkbox" class="delta-switch" data-block="1">
+        <div class="toggle-track"></div>
+        <div class="toggle-thumb"></div>
+      </div>
+      <label class="lbl-infra" data-uk="Інфраструктура" data-en="Infrastructure">Інфраструктура</label>
+    </div>
+  </div>
+  <div class="delta-body">
+    <!-- NOW -->
+    <div class="delta-panel panel-now" data-block="1" data-state="now">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <span class="source-badge manual" data-uk="⚠ Джерело: одне дослідження WHO/МОЗ 2020 + прес-релізи" data-en="⚠ Source: single WHO/MOH 2020 study + press releases">⚠ Джерело: одне дослідження WHO/МОЗ 2020 + прес-релізи</span>
+      </div>
+      <div class="metric-row">
+        <div class="metric-card">
+          <div class="label" data-uk="Онлайн-сертифікати mhGAP" data-en="mhGAP online certificates">Онлайн-сертифікати mhGAP</div>
+          <div class="value">150,000+</div>
+          <div class="sub" data-uk="Самостійний курс, без перевірки засвоєння" data-en="Self-paced course, no learning verification">Самостійний курс, без перевірки засвоєння</div>
+        </div>
+        <div class="metric-card highlight-red">
+          <div class="label" data-uk="Задокументовано практикуючих" data-en="Documented practicing">Задокументовано практикуючих</div>
+          <div class="value">42</div>
+          <div class="sub" data-uk="Єдине дослідження 2020 р. Дефіцит: 3,571×" data-en="Single 2020 study. Deficit: 3,571×">Єдине дослідження 2020 р. Дефіцит: 3,571×</div>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="chart-funnel-now"></canvas></div>
+      <p style="font-size:12px;color:var(--text-dim);margin-top:8px" data-uk="⛔ Немає цифрового зв'язку між видачею сертифікату і першою клінічною сесією. Конверсія не вимірюється." data-en="⛔ No digital link between certificate issuance and first clinical session. Conversion is not measured.">⛔ Немає цифрового зв'язку між видачею сертифікату і першою клінічною сесією. Конверсія не вимірюється.</p>
+    </div>
+    <!-- INFRASTRUCTURE -->
+    <div class="delta-panel panel-infra hidden" data-block="1" data-state="infra">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <span class="source-badge realtime" data-uk="✓ Real-time tracking: сертифікація → перша сесія" data-en="✓ Real-time tracking: certification → first session">✓ Real-time tracking: сертифікація → перша сесія</span>
+      </div>
+      <div class="metric-row">
+        <div class="metric-card highlight-teal">
+          <div class="label" data-uk="Конверсія сертифікат → практика" data-en="Certificate → practice conversion">Конверсія сертифікат → практика</div>
+          <div class="value" data-uk="Вимірюється" data-en="Measured">Вимірюється</div>
+          <div class="sub" data-uk="Digital Bus відстежує кожного від навчання до першого пацієнта" data-en="Digital Bus tracks each practitioner from training to first patient">Digital Bus відстежує кожного від навчання до першого пацієнта</div>
+        </div>
+        <div class="metric-card highlight-teal">
+          <div class="label" data-uk="Супервізія та якість" data-en="Supervision & quality">Супервізія та якість</div>
+          <div class="value" data-uk="PCL-5 / PHQ-9 / GAD-7" data-en="PCL-5 / PHQ-9 / GAD-7">PCL-5 / PHQ-9 / GAD-7</div>
+          <div class="sub" data-uk="Валідовані інструменти, автоматичний anti-fraud < 60 сек" data-en="Validated instruments, automatic anti-fraud < 60 sec">Валідовані інструменти, автоматичний anti-fraud < 60 сек</div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="flow-node active" data-uk="mhGAP курс" data-en="mhGAP course">mhGAP курс</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node active" data-uk="Іспит" data-en="Exam">Іспит</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node gold">Digital Bus</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node active" data-uk="Супервізія" data-en="Supervision">Супервізія</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node active" data-uk="1-ша сесія" data-en="1st session">1-ша сесія</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node active" data-uk="НСЗУ запис" data-en="NHSU record">НСЗУ запис</div>
+      </div>
+      <p style="font-size:12px;color:var(--teal);margin-top:8px" data-uk="✓ Кожен етап верифікований: Дія.ID підпис (CAdES-X-Long), FHIR R4 payload, ledger transaction ID." data-en="✓ Each step verified: Diia.ID signature (CAdES-X-Long), FHIR R4 payload, ledger transaction ID.">✓ Кожен етап верифікований: Дія.ID підпис (CAdES-X-Long), FHIR R4 payload, ledger transaction ID.</p>
+    </div>
+  </div>
+  <div class="bridge-strip">
+    <div class="bridge-icon">Δ</div>
+    <div class="bridge-text" data-uk="<strong>Що потрібно для переходу:</strong> FEEL Again Digital Bus як middleware між навчальними платформами (mhGAP, UNICEF) і ЕСОЗ/НСЗУ. HL7 FHIR R4 стандарт. КМУ Постанова №357 дозволяє підключення як «іншої інформаційної системи» до Трембіти." data-en="<strong>What's needed for transition:</strong> FEEL Again Digital Bus as middleware between training platforms (mhGAP, UNICEF) and ESOZ/NHSU. HL7 FHIR R4 standard. CMU Resolution #357 allows connection as 'other information system' to Trembita."><strong>Що потрібно для переходу:</strong> FEEL Again Digital Bus як middleware між навчальними платформами (mhGAP, UNICEF) і ЕСОЗ/НСЗУ. HL7 FHIR R4 стандарт. КМУ Постанова №357 дозволяє підключення як «іншої інформаційної системи» до Трембіти.</div>
+  </div>
+</div>
+
+<!-- ═══════════ BLOCK 2: 8 PARALLEL SYSTEMS ═══════════ -->
+<div class="delta-block" id="block-2">
+  <div class="delta-header">
+    <h3><span class="num">2</span> <span data-uk="8 Паралельних систем: 0% синхронізації" data-en="8 Parallel Systems: 0% Synchronization">8 Паралельних систем: 0% синхронізації</span></h3>
+    <div class="delta-toggle">
+      <label class="lbl-now" data-uk="Зараз" data-en="Now">Зараз</label>
+      <div class="toggle-switch"><input type="checkbox" class="delta-switch" data-block="2"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>
+      <label class="lbl-infra" data-uk="Інфраструктура" data-en="Infrastructure">Інфраструктура</label>
+    </div>
+  </div>
+  <div class="delta-body">
+    <div class="delta-panel panel-now" data-block="2" data-state="now">
+      <span class="source-badge manual" data-uk="⚠ Джерело: ручний аналіз документації" data-en="⚠ Source: manual documentation analysis">⚠ Джерело: ручний аналіз документації</span>
+      <div class="systems-grid" style="margin-top:12px">
+        <div class="sys-card disconnected"><div class="sys-name">ЕСОЗ / eHealth</div><div class="sys-status" style="color:var(--red)" data-uk="Немає MH-модуля" data-en="No MH module">Немає MH-модуля</div></div>
+        <div class="sys-card disconnected"><div class="sys-name">НСЗУ Реєстр</div><div class="sys-status" style="color:var(--red)" data-uk="17 приватних психіатрів" data-en="17 private psychiatrists">17 приватних психіатрів</div></div>
+        <div class="sys-card disconnected"><div class="sys-name">KoBoToolbox</div><div class="sys-status" style="color:var(--red)" data-uk="Не підключено до Трембіти" data-en="Not connected to Trembita">Не підключено до Трембіти</div></div>
+        <div class="sys-card disconnected"><div class="sys-name">ActivityInfo 5W</div><div class="sys-status" style="color:var(--red)" data-uk="Паралельний збір" data-en="Parallel collection">Паралельний збір</div></div>
+        <div class="sys-card disconnected"><div class="sys-name">CommCare</div><div class="sys-status" style="color:var(--red)" data-uk="Ізольований" data-en="Isolated">Ізольований</div></div>
+        <div class="sys-card disconnected"><div class="sys-name" data-uk="ТИ ЯК?" data-en="TI YAK?">ТИ ЯК?</div><div class="sys-status" style="color:var(--orange)" data-uk="Awareness only" data-en="Awareness only">Awareness only</div></div>
+        <div class="sys-card disconnected"><div class="sys-name">Трембіта</div><div class="sys-status" style="color:var(--orange)" data-uk="MHPSS не підключено" data-en="MHPSS not connected">MHPSS не підключено</div></div>
+        <div class="sys-card disconnected"><div class="sys-name">mhGAP / WHO</div><div class="sys-status" style="color:var(--red)" data-uk="Окрема база" data-en="Separate database">Окрема база</div></div>
+      </div>
+      <p style="font-size:12px;color:var(--text-dim);margin-top:8px" data-uk="⛔ Кожна система збирає дані у власному форматі. Один бенефіціар може бути зареєстрований у 3-4 системах без взаємного розпізнавання." data-en="⛔ Each system collects data in its own format. One beneficiary can be registered in 3-4 systems without cross-recognition.">⛔ Кожна система збирає дані у власному форматі. Один бенефіціар може бути зареєстрований у 3-4 системах без взаємного розпізнавання.</p>
+    </div>
+    <div class="delta-panel panel-infra hidden" data-block="2" data-state="infra">
+      <span class="source-badge realtime" data-uk="✓ Єдиний FHIR R4 middleware — cross-system patient pathway" data-en="✓ Unified FHIR R4 middleware — cross-system patient pathway">✓ Єдиний FHIR R4 middleware — cross-system patient pathway</span>
+      <div class="systems-grid" style="margin-top:12px">
+        <div class="sys-card connected"><div class="sys-name">ЕСОЗ / eHealth</div><div class="sys-status" style="color:var(--teal)" data-uk="← FHIR R4 →" data-en="← FHIR R4 →">← FHIR R4 →</div></div>
+        <div class="sys-card connected"><div class="sys-name">НСЗУ Реєстр</div><div class="sys-status" style="color:var(--teal)" data-uk="DLI trigger → оплата" data-en="DLI trigger → payment">DLI trigger → оплата</div></div>
+        <div class="sys-card connected"><div class="sys-name">KoBoToolbox</div><div class="sys-status" style="color:var(--teal)" data-uk="→ Трембіта ✓" data-en="→ Trembita ✓">→ Трембіта ✓</div></div>
+        <div class="sys-card connected"><div class="sys-name">ActivityInfo 5W</div><div class="sys-status" style="color:var(--teal)" data-uk="Синхронізовано" data-en="Synchronized">Синхронізовано</div></div>
+        <div class="sys-card connected"><div class="sys-name">CommCare</div><div class="sys-status" style="color:var(--teal)" data-uk="API інтеграція" data-en="API integration">API інтеграція</div></div>
+        <div class="sys-card connected"><div class="sys-name" data-uk="ТИ ЯК?" data-en="TI YAK?">ТИ ЯК?</div><div class="sys-status" style="color:var(--teal)" data-uk="→ Маршрутизація" data-en="→ Routing">→ Маршрутизація</div></div>
+        <div class="sys-card connected"><div class="sys-name">Трембіта</div><div class="sys-status" style="color:var(--teal)" data-uk="MHPSS підключено" data-en="MHPSS connected">MHPSS підключено</div></div>
+        <div class="sys-card connected"><div class="sys-name">mhGAP / WHO</div><div class="sys-status" style="color:var(--teal)" data-uk="Верифікація навичок" data-en="Skills verification">Верифікація навичок</div></div>
+      </div>
+      <div class="flow" style="margin-top:12px;justify-content:center">
+        <div class="flow-node" data-uk="Гуманітарна зона" data-en="Humanitarian zone">Гуманітарна зона</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node gold">FEEL Again<br>Digital Bus</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" data-uk="Державна зона" data-en="State zone">Державна зона</div>
+      </div>
+    </div>
+  </div>
+  <div class="bridge-strip">
+    <div class="bridge-icon">Δ</div>
+    <div class="bridge-text" data-uk="<strong>Що потрібно:</strong> Digital Bus — FHIR R4 middleware з маппінгом між KoBoToolbox/CommCare/ActivityInfo і Трембітою/ЕСОЗ. Не заміна жодної системи — з'єднання існуючих через стандартний протокол." data-en="<strong>What's needed:</strong> Digital Bus — FHIR R4 middleware mapping between KoBoToolbox/CommCare/ActivityInfo and Trembita/ESOZ. Not replacing any system — connecting existing ones through standard protocol."><strong>Що потрібно:</strong> Digital Bus — FHIR R4 middleware з маппінгом між KoBoToolbox/CommCare/ActivityInfo і Трембітою/ЕСОЗ. Не заміна жодної системи — з'єднання існуючих через стандартний протокол.</div>
+  </div>
+</div>
+
+<!-- ═══════════ BLOCK 3: $954M LOCKED FUNDS ═══════════ -->
+<div class="delta-block" id="block-3">
+  <div class="delta-header">
+    <h3><span class="num">3</span> <span data-uk="$954M заблокованих коштів (HEAL + THRIVE)" data-en="$954M Locked Funds (HEAL + THRIVE)">$954M заблокованих коштів (HEAL + THRIVE)</span></h3>
+    <div class="delta-toggle">
+      <label class="lbl-now">Зараз</label>
+      <div class="toggle-switch"><input type="checkbox" class="delta-switch" data-block="3"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>
+      <label class="lbl-infra">Інфраструктура</label>
+    </div>
+  </div>
+  <div class="delta-body">
+    <div class="delta-panel panel-now" data-block="3" data-state="now">
+      <span class="source-badge verified" data-uk="◉ Джерело: World Bank ISR #6, Sep 2025 (верифіковано)" data-en="◉ Source: World Bank ISR #6, Sep 2025 (verified)">◉ Джерело: World Bank ISR #6, Sep 2025 (верифіковано)</span>
+      <div class="metric-row" style="margin-top:12px">
+        <div class="metric-card highlight-red">
+          <div class="label">HEAL P180245 — Component 4</div>
+          <div class="value">0 / 4</div>
+          <div class="sub" data-uk="Потенціал 400 закладів. $50M виділено, $8.9M законтрактовано, $41.1M не розподілено. Закриття: 23.12.2026" data-en="400 facilities potential. $50M allocated, $8.9M procured, $41.1M unallocated. Closing: 23.12.2026">Потенціал 400 закладів. $50M виділено, $8.9M законтрактовано, $41.1M не розподілено. Закриття: 23.12.2026</div>
+        </div>
+        <div class="metric-card highlight-red">
+          <div class="label">THRIVE P505616 — DLI</div>
+          <div class="value" data-uk="Тригер не виконується" data-en="Trigger not met">Тригер не виконується</div>
+          <div class="sub" data-uk="$454M, PforR. DLI trigger = запис у НСЗУ. KoBoToolbox не підключено до Трембіти → платежі заморожені" data-en="$454M, PforR. DLI trigger = NHSU record. KoBoToolbox not connected to Trembita → payments frozen">$454M, PforR. DLI trigger = запис у НСЗУ. KoBoToolbox не підключено до Трембіти → платежі заморожені</div>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="chart-funds-now"></canvas></div>
+    </div>
+    <div class="delta-panel panel-infra hidden" data-block="3" data-state="infra">
+      <span class="source-badge realtime" data-uk="✓ Digital Bus виконує DLI trigger автоматично" data-en="✓ Digital Bus fulfills DLI trigger automatically">✓ Digital Bus виконує DLI trigger автоматично</span>
+      <div class="flow" style="margin-top:12px;justify-content:center">
+        <div class="flow-node">KoBoToolbox</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node gold">Digital Bus<br>FHIR R4</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" data-uk="Трембіта" data-en="Trembita">Трембіта</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" data-uk="ЕСОЗ" data-en="ESOZ">ЕСОЗ</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node active" data-uk="НСЗУ запис = DLI ✓" data-en="NHSU record = DLI ✓">НСЗУ запис = DLI ✓</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node active" style="border-color:var(--green);color:var(--green)" data-uk="$454M розблоковано" data-en="$454M unlocked">$454M розблоковано</div>
+      </div>
+      <div class="metric-row" style="margin-top:16px">
+        <div class="metric-card highlight-teal">
+          <div class="label" data-uk="HEAL C4 розблоковано" data-en="HEAL C4 unlocked">HEAL C4 розблоковано</div>
+          <div class="value">$41.1M</div>
+          <div class="sub" data-uk="400 закладів отримують capacity-building" data-en="400 facilities receive capacity-building">400 закладів отримують capacity-building</div>
+        </div>
+        <div class="metric-card highlight-teal">
+          <div class="label" data-uk="THRIVE DLI розблоковано" data-en="THRIVE DLI unlocked">THRIVE DLI розблоковано</div>
+          <div class="value">$454M</div>
+          <div class="sub" data-uk="Кошти проходять через НБУ як депозитарій" data-en="Funds flow through NBU as depository">Кошти проходять через НБУ як депозитарій</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bridge-strip">
+    <div class="bridge-icon">Δ</div>
+    <div class="bridge-text" data-uk="<strong>Для НБУ:</strong> THRIVE $454M проходить через НБУ як депозитарій. Без цифрового підтвердження сесій (DLI trigger) — кошти не рухаються. Digital Bus створює цей trigger. НБУ отримує institutional visibility у найбільшому health-reform проєкті країни." data-en="<strong>For NBU:</strong> THRIVE $454M flows through NBU as depository. Without digital session verification (DLI trigger) — funds don't move. Digital Bus creates this trigger. NBU gains institutional visibility in the country's largest health reform project."><strong>Для НБУ:</strong> THRIVE $454M проходить через НБУ як депозитарій. Без цифрового підтвердження сесій (DLI trigger) — кошти не рухаються. Digital Bus створює цей trigger. НБУ отримує institutional visibility у найбільшому health-reform проєкті країни.</div>
+  </div>
+</div>
+
+<!-- ═══════════ BLOCK 4: SHADOW SECTOR ═══════════ -->
+<div class="delta-block" id="block-4">
+  <div class="delta-header">
+    <h3><span class="num">4</span> <span data-uk="Тіньовий сектор: 6,500 vs 17" data-en="Shadow Sector: 6,500 vs 17">Тіньовий сектор: 6,500 vs 17</span></h3>
+    <div class="delta-toggle">
+      <label class="lbl-now">Зараз</label>
+      <div class="toggle-switch"><input type="checkbox" class="delta-switch" data-block="4"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>
+      <label class="lbl-infra">Інфраструктура</label>
+    </div>
+  </div>
+  <div class="delta-body">
+    <div class="delta-panel panel-now" data-block="4" data-state="now">
+      <span class="source-badge verified" data-uk="◉ Джерело: НСЗУ портал 10.04.2026 + аналітична оцінка" data-en="◉ Source: NHSU portal 10.04.2026 + analytical estimate">◉ Джерело: НСЗУ портал 10.04.2026 + аналітична оцінка</span>
+      <table class="comp-table" style="margin-top:12px">
+        <tr><th data-uk="Показник" data-en="Indicator">Показник</th><th data-uk="Значення" data-en="Value">Значення</th><th data-uk="Джерело" data-en="Source">Джерело</th></tr>
+        <tr><td data-uk="Приватні психіатри в НСЗУ" data-en="Private psychiatrists in NHSU">Приватні психіатри в НСЗУ</td><td class="val-now">17</td><td>НСЗУ 10.04.2026</td></tr>
+        <tr><td data-uk="МЗ-спеціалісти приватний/ФОП" data-en="MH specialists private/FOP">МЗ-спеціалісти приватний/ФОП</td><td class="val-now">~65</td><td>НСЗУ 10.04.2026</td></tr>
+        <tr><td data-uk="Оцінка тіньового сектору" data-en="Shadow sector estimate">Оцінка тіньового сектору</td><td class="val-now">~6,500</td><td data-uk="Аналітична оцінка" data-en="Analytical estimate">Аналітична оцінка</td></tr>
+        <tr><td data-uk="Штраф за формалізацію" data-en="Formalization penalty">Штраф за формалізацію</td><td class="val-now">~65%</td><td data-uk="Різниця нетто-доходу" data-en="Net income difference">Різниця нетто-доходу</td></tr>
+        <tr><td data-uk="Обсяг тіньового ринку / рік" data-en="Shadow market volume / year">Обсяг тіньового ринку / рік</td><td class="val-now">€117M</td><td data-uk="6,500 × €1,500/міс × 12" data-en="6,500 × €1,500/mo × 12">6,500 × €1,500/міс × 12</td></tr>
+      </table>
+      <p style="font-size:12px;color:var(--text-dim);margin-top:8px" data-uk="⛔ Чому не формалізуються: занадто дорого (война важливіше), не знаю куди йти, стигма. Закон №12030 — сертифікація обов'язкова з 2031, але перехідний період без інструментів." data-en="⛔ Why they don't formalize: too expensive (war is more important), don't know where to go, stigma. Law #12030 — mandatory certification by 2031, but transition period without tools.">⛔ Чому не формалізуються: занадто дорого (война важливіше), не знаю куди йти, стигма. Закон №12030 — сертифікація обов'язкова з 2031, але перехідний період без інструментів.</p>
+    </div>
+    <div class="delta-panel panel-infra hidden" data-block="4" data-state="infra">
+      <span class="source-badge realtime" data-uk="✓ Економічний стимул до формалізації через видимість у системі" data-en="✓ Economic incentive for formalization through system visibility">✓ Економічний стимул до формалізації через видимість у системі</span>
+      <table class="comp-table" style="margin-top:12px">
+        <tr><th data-uk="Механізм" data-en="Mechanism">Механізм</th><th data-uk="Результат" data-en="Result">Результат</th></tr>
+        <tr><td data-uk="NFC-маршрутизація через банківські відділення" data-en="NFC routing through bank branches">NFC-маршрутизація через банківські відділення</td><td class="val-infra" data-uk="Доступ до пацієнтів Хартії ветеранів" data-en="Access to Veterans Charter patients">Доступ до пацієнтів Хартії ветеранів</td></tr>
+        <tr><td data-uk="Train-for-Care: навчання в банках" data-en="Train-for-Care: training in banks">Train-for-Care: навчання в банках</td><td class="val-infra" data-uk="20 психологів × €3,780 = €90K, ROI 2.2×" data-en="20 psychologists × €3,780 = €90K, ROI 2.2×">20 психологів × €3,780 = €90K, ROI 2.2×</td></tr>
+        <tr><td data-uk="Видимість у НСЗУ = страхові платежі" data-en="NHSU visibility = insurance payments">Видимість у НСЗУ = страхові платежі</td><td class="val-infra" data-uk="Знижує формалізаційний штраф з 65% до ~20%" data-en="Reduces formalization penalty from 65% to ~20%">Знижує формалізаційний штраф з 65% до ~20%</td></tr>
+        <tr><td data-uk="MHI кредитний скоринг ветеранів" data-en="MHI veteran credit scoring">MHI кредитний скоринг ветеранів</td><td class="val-infra" data-uk="Нижча ставка = бонус, не відмова" data-en="Lower rate = bonus, not refusal">Нижча ставка = бонус, не відмова</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="bridge-strip">
+    <div class="bridge-icon">Δ</div>
+    <div class="bridge-text" data-uk="<strong>Для НБУ:</strong> €117M тіньового ринку — це невидимий для регулятора фінансовий потік. Формалізація через Digital Bus робить його видимим, оподатковуваним і керованим. Хартія ветеранів (100+ компаній) — канал маршрутизації." data-en="<strong>For NBU:</strong> €117M shadow market is invisible to the regulator. Formalization through Digital Bus makes it visible, taxable, and manageable. Veterans Charter (100+ companies) — routing channel."><strong>Для НБУ:</strong> €117M тіньового ринку — це невидимий для регулятора фінансовий потік. Формалізація через Digital Bus робить його видимим, оподатковуваним і керованим. Хартія ветеранів (100+ компаній) — канал маршрутизації.</div>
+  </div>
+</div>
+
+<!-- ═══════════ BLOCK 5: TREATMENT BACKLOG ═══════════ -->
+<div class="delta-block" id="block-5">
+  <div class="delta-header">
+    <h3><span class="num">5</span> <span data-uk="Беклог лікування: 62.4M сесій, 0.28% покриття" data-en="Treatment Backlog: 62.4M Sessions, 0.28% Coverage">Беклог лікування: 62.4M сесій, 0.28% покриття</span></h3>
+    <div class="delta-toggle">
+      <label class="lbl-now">Зараз</label>
+      <div class="toggle-switch"><input type="checkbox" class="delta-switch" data-block="5"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>
+      <label class="lbl-infra">Інфраструктура</label>
+    </div>
+  </div>
+  <div class="delta-body">
+    <div class="delta-panel panel-now" data-block="5" data-state="now">
+      <span class="source-badge verified" data-uk="◉ WHO 2025, Lancet 2023, НСЗУ open data" data-en="◉ WHO 2025, Lancet 2023, NHSU open data">◉ WHO 2025, Lancet 2023, НСЗУ open data</span>
+      <div class="metric-row" style="margin-top:12px">
+        <div class="metric-card highlight-red">
+          <div class="label" data-uk="Потреба у сесіях / рік" data-en="Session demand / year">Потреба у сесіях / рік</div>
+          <div class="value">62,400,000</div>
+          <div class="sub" data-uk="3.9M × 16 сесій (WHO стандарт)" data-en="3.9M × 16 sessions (WHO standard)">3.9M × 16 сесій (WHO стандарт)</div>
+        </div>
+        <div class="metric-card highlight-red">
+          <div class="label" data-uk="Поточна пропускна здатність" data-en="Current capacity">Поточна пропускна здатність</div>
+          <div class="value">180,000</div>
+          <div class="sub" data-uk="= 0.28% від потреби. Беклог: 7.8–10.4 років" data-en="= 0.28% of demand. Backlog: 7.8–10.4 years">= 0.28% від потреби. Беклог: 7.8–10.4 років</div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-card">
+          <div class="label" data-uk="Чому не йдуть до психолога" data-en="Why people don't seek help">Чому не йдуть до психолога</div>
+          <div class="value" style="font-size:16px" data-uk="30% — дорого · 25% — не знаю куди · 20% — стигма" data-en="30% — expensive · 25% — don't know where · 20% — stigma">30% — дорого · 25% — не знаю куди · 20% — стигма</div>
+          <div class="sub" data-uk="«Війна важливіша» — більшість не вважає MH пріоритетом" data-en="'War is more important' — most don't see MH as priority">«Війна важливіша» — більшість не вважає MH пріоритетом</div>
+        </div>
+        <div class="metric-card">
+          <div class="label" data-uk="Ринковий потенціал" data-en="Market potential">Ринковий потенціал</div>
+          <div class="value" style="font-size:18px">€2.5–4.1B</div>
+          <div class="sub" data-uk="62.4M год × €40–65/год. Aftershock: €5.4B" data-en="62.4M hr × €40–65/hr. Aftershock: €5.4B">62.4M год × €40–65/год. Aftershock: €5.4B</div>
+        </div>
+      </div>
+    </div>
+    <div class="delta-panel panel-infra hidden" data-block="5" data-state="infra">
+      <span class="source-badge realtime" data-uk="✓ Blended finance + reverse waterfall + session scheduling" data-en="✓ Blended finance + reverse waterfall + session scheduling">✓ Blended finance + reverse waterfall + session scheduling</span>
+      <div class="metric-row" style="margin-top:12px">
+        <div class="metric-card highlight-teal">
+          <div class="label" data-uk="Пілот: 50,000 пацієнтів (Хартія)" data-en="Pilot: 50,000 patients (Charter)">Пілот: 50,000 пацієнтів (Хартія)</div>
+          <div class="value">$35M GMV</div>
+          <div class="sub" data-uk="10 сесій × $70 × 50K. Bus revenue: $3.5M (5%)" data-en="10 sessions × $70 × 50K. Bus revenue: $3.5M (5%)">10 сесій × $70 × 50K. Bus revenue: $3.5M (5%)</div>
+        </div>
+        <div class="metric-card highlight-teal">
+          <div class="label" data-uk="Економічний ефект (ROI 4.3)" data-en="Economic effect (ROI 4.3)">Економічний ефект (ROI 4.3)</div>
+          <div class="value">$150.5M</div>
+          <div class="sub" data-uk="$35M × 4.3 = повернення продуктивності" data-en="$35M × 4.3 = productivity return">$35M × 4.3 = повернення продуктивності</div>
+        </div>
+      </div>
+      <div class="flow" style="margin-top:12px;justify-content:center;flex-wrap:wrap">
+        <div class="flow-node" data-uk="P2P 10-15%" data-en="P2P 10-15%">P2P 10-15%</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" data-uk="CSR корпорат." data-en="CSR corporate">CSR корпорат.</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node gold" data-uk="Ledger верифікація" data-en="Ledger verification">Ledger верифікація</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node active" data-uk="Донорське ко-фінансув." data-en="Donor co-financing">Донорське ко-фінансув.</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node active" style="border-color:var(--green);color:var(--green)">SIB</div>
+      </div>
+      <p style="font-size:12px;color:var(--teal);margin-top:8px" data-uk="Reverse Waterfall: P2P → Corporate → Donor, де кожен наступний рівень активується верифікованим Ledger-записом попереднього." data-en="Reverse Waterfall: P2P → Corporate → Donor, where each next level is activated by the verified Ledger record of the previous one.">Reverse Waterfall: P2P → Corporate → Donor, де кожен наступний рівень активується верифікованим Ledger-записом попереднього.</p>
+    </div>
+  </div>
+  <div class="bridge-strip">
+    <div class="bridge-icon">Δ</div>
+    <div class="bridge-text" data-uk="<strong>Для НБУ:</strong> SIB модель ($745M globally, 276 проєктів у 37 країнах). Інвестори авансують $35M → THRIVE повертає з відсотками після DLI верифікації. НБУ Regulatory Sandbox (Постанова №39/2023) — ідеальний механізм для пілоту." data-en="<strong>For NBU:</strong> SIB model ($745M globally, 276 projects in 37 countries). Investors advance $35M → THRIVE repays with interest after DLI verification. NBU Regulatory Sandbox (Resolution #39/2023) — ideal mechanism for pilot."><strong>Для НБУ:</strong> SIB модель ($745M globally, 276 проєктів у 37 країнах). Інвестори авансують $35M → THRIVE повертає з відсотками після DLI верифікації. НБУ Regulatory Sandbox (Постанова №39/2023) — ідеальний механізм для пілоту.</div>
+  </div>
+</div>
+
+<!-- ═══════════ BLOCK 6: DONOR REPORTING ═══════════ -->
+<div class="delta-block" id="block-6">
+  <div class="delta-header">
+    <h3><span class="num">6</span> <span data-uk="Донорська звітність: 450+ організацій, 0 стандартів" data-en="Donor Reporting: 450+ Organizations, 0 Standards">Донорська звітність: 450+ організацій, 0 стандартів</span></h3>
+    <div class="delta-toggle">
+      <label class="lbl-now">Зараз</label>
+      <div class="toggle-switch"><input type="checkbox" class="delta-switch" data-block="6"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>
+      <label class="lbl-infra">Інфраструктура</label>
+    </div>
+  </div>
+  <div class="delta-body">
+    <div class="delta-panel panel-now" data-block="6" data-state="now">
+      <span class="source-badge manual" data-uk="⚠ Джерело: OCHA 5W, MHPSS TWG протоколи, окремі звіти" data-en="⚠ Source: OCHA 5W, MHPSS TWG protocols, separate reports">⚠ Джерело: OCHA 5W, MHPSS TWG протоколи, окремі звіти</span>
+      <div class="metric-row" style="margin-top:12px">
+        <div class="metric-card">
+          <div class="label" data-uk="Організацій у MHPSS TWG" data-en="Organizations in MHPSS TWG">Організацій у MHPSS TWG</div>
+          <div class="value">450+</div>
+          <div class="sub" data-uk="Збори 2×/тижд., 3 хаби, 4 task teams" data-en="Meetings 2×/week, 3 hubs, 4 task teams">Збори 2×/тижд., 3 хаби, 4 task teams</div>
+        </div>
+        <div class="metric-card highlight-red">
+          <div class="label" data-uk="Cost-per-beneficiary в реальному часі" data-en="Real-time cost-per-beneficiary">Cost-per-beneficiary в реальному часі</div>
+          <div class="value" data-uk="Не існує" data-en="Does not exist">Не існує</div>
+          <div class="sub" data-uk="Кожна організація звітує окремо, різні формати, різні метрики" data-en="Each org reports separately, different formats, different metrics">Кожна організація звітує окремо, різні формати, різні метрики</div>
+        </div>
+      </div>
+    </div>
+    <div class="delta-panel panel-infra hidden" data-block="6" data-state="infra">
+      <span class="source-badge realtime" data-uk="✓ Єдиний audit trail: від гранту до бенефіціара" data-en="✓ Unified audit trail: from grant to beneficiary">✓ Єдиний audit trail: від гранту до бенефіціара</span>
+      <div class="metric-row" style="margin-top:12px">
+        <div class="metric-card highlight-teal">
+          <div class="label" data-uk="Real-time cost-per-beneficiary" data-en="Real-time cost-per-beneficiary">Real-time cost-per-beneficiary</div>
+          <div class="value" data-uk="Автоматичний" data-en="Automatic">Автоматичний</div>
+          <div class="sub" data-uk="Transaction-level audit trail для кожного гранту" data-en="Transaction-level audit trail for each grant">Transaction-level audit trail для кожного гранту</div>
+        </div>
+        <div class="metric-card highlight-teal">
+          <div class="label" data-uk="Ринок donor intelligence SaaS" data-en="Donor intelligence SaaS market">Ринок donor intelligence SaaS</div>
+          <div class="value">$50–100M</div>
+          <div class="sub" data-uk="Додатковий SaaS add-on для NGO (Valyu Deep Research)" data-en="Additional SaaS add-on for NGOs (Valyu Deep Research)">Додатковий SaaS add-on для NGO (Valyu Deep Research)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bridge-strip">
+    <div class="bridge-icon">Δ</div>
+    <div class="bridge-text" data-uk="<strong>Що потрібно:</strong> Стандартизований FHIR R4 payload з transaction_id, ledger_tx_id, clinical_payload. Кожна транзакція — від донора до сесії і назад — верифікована і аудитована." data-en="<strong>What's needed:</strong> Standardized FHIR R4 payload with transaction_id, ledger_tx_id, clinical_payload. Every transaction — from donor to session and back — verified and auditable."><strong>Що потрібно:</strong> Стандартизований FHIR R4 payload з transaction_id, ledger_tx_id, clinical_payload. Кожна транзакція — від донора до сесії і назад — верифікована і аудитована.</div>
+  </div>
+</div>
+
+<!-- ═══════════ BLOCK 7: MH ECONOMIC INDEX ═══════════ -->
+<div class="delta-block" id="block-7">
+  <div class="delta-header">
+    <h3><span class="num">7</span> <span data-uk="Mental Health Economic Index — перший у світі" data-en="Mental Health Economic Index — World's First">Mental Health Economic Index — перший у світі</span></h3>
+    <div class="delta-toggle">
+      <label class="lbl-now">Зараз</label>
+      <div class="toggle-switch"><input type="checkbox" class="delta-switch" data-block="7"><div class="toggle-track"></div><div class="toggle-thumb"></div></div>
+      <label class="lbl-infra">Інфраструктура</label>
+    </div>
+  </div>
+  <div class="delta-body">
+    <div class="delta-panel panel-now" data-block="7" data-state="now">
+      <span class="source-badge manual" data-uk="⚠ Зараз: MH вимірюється опитуваннями, не фінансовими потоками" data-en="⚠ Now: MH measured by surveys, not financial flows">⚠ Зараз: MH вимірюється опитуваннями, не фінансовими потоками</span>
+      <div class="metric-row" style="margin-top:12px">
+        <div class="metric-card">
+          <div class="label" data-uk="Методи вимірювання MH" data-en="MH measurement methods">Методи вимірювання MH</div>
+          <div class="value" style="font-size:14px" data-uk="Опитування (Gradus, Lancet)" data-en="Surveys (Gradus, Lancet)">Опитування (Gradus, Lancet)</div>
+          <div class="sub" data-uk="Затримка 6-18 міс., вибірка, суб'єктивність" data-en="6-18 month lag, sampling, subjectivity">Затримка 6-18 міс., вибірка, суб'єктивність</div>
+        </div>
+        <div class="metric-card highlight-red">
+          <div class="label" data-uk="Індекс через фінансові потоки" data-en="Index via financial flows">Індекс через фінансові потоки</div>
+          <div class="value" data-uk="Не існує" data-en="Does not exist">Не існує</div>
+          <div class="sub" data-uk="Жодна країна не вимірює MH через real-time фінансову поведінку" data-en="No country measures MH through real-time financial behavior">Жодна країна не вимірює MH через real-time фінансову поведінку</div>
+        </div>
+      </div>
+    </div>
+    <div class="delta-panel panel-infra hidden" data-block="7" data-state="infra">
+      <span class="source-badge realtime" data-uk="✓ НБУ = data custodian · КНУ Шевченка = наукова верифікація" data-en="✓ NBU = data custodian · KNU = scientific verification">✓ НБУ = data custodian · КНУ Шевченка = наукова верифікація</span>
+      <div class="metric-row" style="margin-top:12px">
+        <div class="metric-card highlight-gold">
+          <div class="label" data-uk="MH Economic Index (MHI)" data-en="MH Economic Index (MHI)">MH Economic Index (MHI)</div>
+          <div class="value" data-uk="Перший у світі" data-en="World's first">Перший у світі</div>
+          <div class="sub" data-uk="Вимірює economic impact MH через реальні фінансові потоки, не опитування" data-en="Measures MH economic impact through real financial flows, not surveys">Вимірює economic impact MH через реальні фінансові потоки, не опитування</div>
+        </div>
+        <div class="metric-card highlight-gold">
+          <div class="label" data-uk="Ветеранський кредитний скоринг" data-en="Veteran credit scoring">Ветеранський кредитний скоринг</div>
+          <div class="value" data-uk="MHI як колатераль" data-en="MHI as collateral">MHI як колатераль</div>
+          <div class="sub" data-uk="Лікування ≠ відмова в кредиті. Лікування = нижча ставка (бонус)" data-en="Treatment ≠ loan denial. Treatment = lower rate (bonus)">Лікування ≠ відмова в кредиті. Лікування = нижча ставка (бонус)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bridge-strip">
+    <div class="bridge-icon">★</div>
+    <div class="bridge-text" data-uk="<strong>Це — institutional legacy opportunity для НБУ.</strong> Не просто регулювання фінтеху — створення нового класу даних на перетині фінансів і здоров'я. НБУ Regulatory Sandbox (Постанова №39/2023) — механізм для запуску. Це те, що не може зробити жоден інший інститут в Україні." data-en="<strong>This is an institutional legacy opportunity for NBU.</strong> Not just fintech regulation — creating a new data class at the intersection of finance and health. NBU Regulatory Sandbox (Resolution #39/2023) — the mechanism to launch. This is what no other institution in Ukraine can do."><strong>Це — institutional legacy opportunity для НБУ.</strong> Не просто регулювання фінтеху — створення нового класу даних на перетині фінансів і здоров'я. НБУ Regulatory Sandbox (Постанова №39/2023) — механізм для запуску. Це те, що не може зробити жоден інший інститут в Україні.</div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-box" id="summary">
+  <h2 data-uk="Дельта = FEEL Again" data-en="Delta = FEEL Again">Дельта = FEEL Again</h2>
+  <p data-uk="Кожен із 7 блоків показує один і той самий паттерн: дані збираються вручну з фрагментованих джерел, не синхронізуються між системами, і не генерують actionable insight для прийняття рішень. FEEL Again — не ще одна платформа. Це технологічний міст, який з'єднує те що є з тим що повинно бути. Різниця між лівою і правою колонкою — це не вартість софтвера. Це вартість бездіяльності: $954M заблокованих коштів, €117M тіньового ринку, 7.8 років беклогу." data-en="Each of the 7 blocks shows the same pattern: data collected manually from fragmented sources, not synchronized between systems, and not generating actionable insight for decision-making. FEEL Again is not another platform. It's a technological bridge connecting what exists with what should exist. The difference between the left and right columns is not the cost of software. It's the cost of inaction: $954M locked funds, €117M shadow market, 7.8 years of backlog.">Кожен із 7 блоків показує один і той самий паттерн: дані збираються вручну з фрагментованих джерел, не синхронізуються між системами, і не генерують actionable insight для прийняття рішень. FEEL Again — не ще одна платформа. Це технологічний міст, який з'єднує те що є з тим що повинно бути. Різниця між лівою і правою колонкою — це не вартість софтвера. Це вартість бездіяльності: $954M заблокованих коштів, €117M тіньового ринку, 7.8 років беклогу.</p>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span data-uk="FEEL Again · Programme Architecture · Дані: 2020–2026 · Верифіковані джерела: WHO, World Bank ISR #6, НСЗУ портал (10.04.2026), Lancet 2023, OCHA" data-en="FEEL Again · Programme Architecture · Data: 2020–2026 · Verified sources: WHO, World Bank ISR #6, NHSU portal (10.04.2026), Lancet 2023, OCHA">FEEL Again · Programme Architecture · Дані: 2020–2026 · Верифіковані джерела: WHO, World Bank ISR #6, НСЗУ портал (10.04.2026), Lancet 2023, OCHA</span>
+</div>
+
+</div><!-- /main -->
+</div><!-- /main-wrap -->
+</div><!-- /app -->
+
+<script>
+// ══════════════════════════════════════════════
+// LANGUAGE & THEME
+// ══════════════════════════════════════════════
+function L(){return document.documentElement.dataset.lang||'uk'}
+function T(){return document.documentElement.dataset.theme||'dark'}
+
+function toggleLang(){
+  const nl = L()==='uk'?'en':'uk';
+  document.documentElement.dataset.lang=nl;
+  document.getElementById('langBtn').textContent=nl==='uk'?'EN':'UK';
+  document.querySelectorAll('[data-uk]').forEach(el=>{
+    const t=el.getAttribute('data-'+nl);
+    if(t){
+      if(el.tagName==='INPUT')el.value=t;
+      else el.innerHTML=t;
+    }
+  });
+  buildCharts();
+}
+function toggleTheme(){
+  const nt=T()==='dark'?'light':'dark';
+  document.documentElement.dataset.theme=nt;
+  document.getElementById('themeBtn').textContent=nt==='dark'?'☀':'☽';
+  buildCharts();
+}
+
+// ══════════════════════════════════════════════
+// DELTA TOGGLE SWITCHES
+// ══════════════════════════════════════════════
+document.querySelectorAll('.delta-switch').forEach(sw=>{
+  sw.addEventListener('change',function(){
+    const block=this.dataset.block;
+    const panels=document.querySelectorAll(`.delta-panel[data-block="${block}"]`);
+    panels.forEach(p=>{
+      if(this.checked){
+        p.classList.toggle('hidden',p.dataset.state==='now');
+      }else{
+        p.classList.toggle('hidden',p.dataset.state==='infra');
+      }
+    });
+  });
+});
+
+// View mode buttons
+document.querySelectorAll('#viewMode button').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('#viewMode button').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    const view=this.dataset.view;
+    document.querySelectorAll('.delta-switch').forEach(sw=>{
+      if(view==='all-now'){sw.checked=false;sw.dispatchEvent(new Event('change'));}
+      else if(view==='all-infra'){sw.checked=true;sw.dispatchEvent(new Event('change'));}
+    });
+  });
+});
+
+// ══════════════════════════════════════════════
+// SIDEBAR SCROLL HIGHLIGHT
+// ══════════════════════════════════════════════
+const sideLinks=document.querySelectorAll('.sidebar-nav a');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      sideLinks.forEach(l=>l.classList.remove('active'));
+      const link=document.querySelector(`.sidebar-nav a[href="#${e.target.id}"]`);
+      if(link)link.classList.add('active');
+    }
+  });
+},{threshold:0.3});
+document.querySelectorAll('.delta-block,.hero,.summary-box').forEach(s=>observer.observe(s));
+
+// ══════════════════════════════════════════════
+// CHARTS
+// ══════════════════════════════════════════════
+const chartInstances={};
+function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id];}}
+
+function buildCharts(){
+  const l=L();
+  const isDark=T()==='dark';
+  const gridColor=isDark?'rgba(200,164,92,0.08)':'rgba(139,105,20,0.08)';
+  const textColor=isDark?'#8896ab':'#5a6375';
+
+  // Chart 1: mhGAP Funnel
+  destroyChart('chart-funnel-now');
+  const ctx1=document.getElementById('chart-funnel-now');
+  if(ctx1){
+    chartInstances['chart-funnel-now']=new Chart(ctx1,{
+      type:'bar',
+      data:{
+        labels:l==='uk'
+          ?['Онлайн-серт.','Первинні лікарі','НСЗУ заклади (МЗ)','Очне + супервізія','Практикують (2020)']
+          :['Online certs','Primary doctors','NHSU MH facilities','In-person + superv.','Practicing (2020)'],
+        datasets:[{
+          data:[150000,19000,943,700,42],
+          backgroundColor:['rgba(46,196,182,0.3)','rgba(46,196,182,0.4)','rgba(200,164,92,0.5)','rgba(34,197,94,0.5)','rgba(239,68,68,0.6)'],
+          borderColor:['#2ec4b6','#2ec4b6','#c8a45c','#22c55e','#ef4444'],
+          borderWidth:1
+        }]
+      },
+      options:{
+        indexAxis:'y',
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toLocaleString()}}},
+        scales:{
+          x:{type:'logarithmic',grid:{color:gridColor},ticks:{color:textColor,callback:v=>v>=1000?v/1000+'K':v}},
+          y:{grid:{display:false},ticks:{color:textColor,font:{size:11}}}
+        }
+      }
+    });
+  }
+
+  // Chart 3: Funds disbursement
+  destroyChart('chart-funds-now');
+  const ctx3=document.getElementById('chart-funds-now');
+  if(ctx3){
+    chartInstances['chart-funds-now']=new Chart(ctx3,{
+      type:'bar',
+      data:{
+        labels:['HEAL ($500M)','THRIVE ($454M)'],
+        datasets:[
+          {label:l==='uk'?'Освоєно':'Disbursed',data:[171,320],backgroundColor:'rgba(46,196,182,0.5)',borderColor:'#2ec4b6',borderWidth:1},
+          {label:l==='uk'?'Не освоєно':'Undisbursed',data:[329,134],backgroundColor:'rgba(239,68,68,0.4)',borderColor:'#ef4444',borderWidth:1}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{labels:{color:textColor,font:{size:11}}}},
+        scales:{
+          x:{stacked:true,grid:{display:false},ticks:{color:textColor}},
+          y:{stacked:true,grid:{color:gridColor},ticks:{color:textColor,callback:v=>'$'+v+'M'}}
+        }
+      }
+    });
+  }
+}
+
+// Initial build
+buildCharts();
+</script>
+</body>
+</html>

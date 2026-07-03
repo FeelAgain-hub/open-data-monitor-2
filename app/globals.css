@@ -1,0 +1,115 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-gold: #c8a45c;
+  --color-gold-dark: #8b6914;
+  --color-teal: #2ec4b6;
+  --color-teal-dark: #1a8a7e;
+  --color-red: #e05545;
+  --color-red-dark: #b5331f;
+  --color-navy: #0a1628;
+}
+
+:root {
+  --background: #f2f0eb;
+  --foreground: #1f2430;
+  --card: #ffffff;
+  --card-foreground: #1f2430;
+  --border: #dcdad2;
+  
+  --gold: #8b6914;
+  --teal: #1a8a7e;
+  --red: #b5331f;
+  --green: #2a7a50;
+  --text-sec: #5c6270;
+}
+
+.dark {
+  --background: #080f1c;
+  --foreground: #ffffff;
+  --card: #0f1826;
+  --card-foreground: #e2e8f0;
+  --border: #1e293b;
+
+  --gold: #c8a45c;
+  --teal: #2ec4b6;
+  --red: #e05545;
+  --green: #4ade80;
+  --text-sec: #94a3b8;
+  --text-sec-dark: #94a3b8; /* Explicit for dark hero text */
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] font-sans antialiased transition-colors duration-300;
+  }
+}
+
+.glow-teal {
+  text-shadow: 0 0 10px rgba(46, 196, 182, 0.4), 0 0 20px rgba(46, 196, 182, 0.2);
+}
+
+.glow-gold {
+  text-shadow: 0 0 10px rgba(200, 164, 92, 0.6), 0 0 20px rgba(200, 164, 92, 0.3);
+}
+
+.glow-red {
+  text-shadow: 0 0 10px rgba(224, 85, 69, 0.6), 0 0 20px rgba(224, 85, 69, 0.3);
+}
+
+.glow-white {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #0a1628 0%, #1a0a0a 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 80% 60% at 20% 60%, rgba(0, 210, 170, 0.28) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 80% 40%, rgba(0, 180, 200, 0.18) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 110%, rgba(46, 196, 182, 0.15) 0%, transparent 60%);
+  z-index: 0;
+}
+
+.hero-border-glow {
+  position: relative;
+}
+
+.hero-border-glow::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #00d4aa 30%, #2ec4b6 60%, rgba(200, 164, 92, 0.6) 100%);
+  box-shadow: 0 0 24px rgba(0, 212, 170, 0.6);
+}
+
+.section-label {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.card-canonical {
+  @apply bg-[var(--card)] border border-[var(--border)] rounded-xl transition-all duration-200;
+}
+
+.card-canonical:hover {
+  border-color: var(--gold);
+}
